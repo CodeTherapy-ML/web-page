@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react"
 import SectionLabel from "@/components/section-label"
 import Reveal from "@/components/reveal"
 import StatsBand from "@/components/stats-band"
+import MemberAvatar from "@/components/member-avatar"
 import { values } from "@/lib/site-content"
 import { getTeamMembers } from "@/lib/content-queries"
 import { teamMembers as team } from "@/lib/content"
@@ -84,7 +85,7 @@ export default async function AboutPage() {
 
       {/* ---------------------------------------------- mission / vision */}
       <section className="grid grid-cols-1 gap-8 py-16 shell lg:grid-cols-2 lg:py-20">
-        <div className="flex flex-col gap-5 p-10 rounded-3xl bg-sage-soft">
+        <div className="flex flex-col gap-5 p-10 rounded-3xl bg-azure-soft">
           <SectionLabel size="md">Our Mission</SectionLabel>
           <h2 className="font-serif text-[26px] font-semibold text-ink md:text-[32px]">
             Harnessing AI for global health equity.
@@ -95,7 +96,7 @@ export default async function AboutPage() {
             across the globe.
           </p>
         </div>
-        <div className="flex flex-col gap-5 p-10 rounded-3xl bg-clay-soft">
+        <div className="flex flex-col gap-5 p-10 rounded-3xl bg-navy-soft">
           <SectionLabel tone="clay" size="md">Our Vision</SectionLabel>
           <h2 className="font-serif text-[26px] font-semibold text-ink md:text-[32px]">
             A world where geography doesn&rsquo;t dictate care.
@@ -120,8 +121,8 @@ export default async function AboutPage() {
           {values.map(({ icon: Icon, title, body }, i) => (
             <Reveal key={title} delay={i * 80}>
               <div className="flex flex-col h-full gap-4 bg-white border rounded-2xl border-line p-7">
-                <span className="flex size-11 items-center justify-center rounded-[22px] bg-clay-soft">
-                  <Icon className="size-5 text-clay" />
+                <span className="flex size-11 items-center justify-center rounded-[22px] bg-navy-soft">
+                  <Icon className="size-5 text-navy" />
                 </span>
                 <h3 className="font-serif text-[22px] font-semibold text-ink">{title}</h3>
                 <p className="text-sm leading-[1.5] text-ink-soft">{body}</p>
@@ -150,21 +151,19 @@ export default async function AboutPage() {
                   sits high so the trim always comes off the chest, never the face.
                   Wide environmental shots give up side background instead.
                 */}
-                <div className="relative w-full border-b aspect-square shrink-0 border-line bg-sage-soft">
-                  <Image
-                    src={member.photo}
-                    alt={member.name}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover object-[center_25%]"
-                  />
-                </div>
+                <MemberAvatar
+                  name={member.name}
+                  src={member.photo}
+                  className="aspect-square w-full shrink-0 border-b border-line"
+                  imgClassName="object-[center_25%]"
+                  iconClassName="size-16 text-azure/40"
+                />
                 <div className="flex flex-col gap-2 px-5 pt-5 pb-6">
                   <div className="flex items-center gap-2">
                     <h3 className="font-serif text-xl font-semibold text-ink">{member.name}</h3>
                     <span className="text-lg leading-none">{member.flag}</span>
                   </div>
-                  <p className="text-[13px] font-semibold uppercase text-sage">{member.role}</p>
+                  <p className="text-[13px] font-semibold uppercase text-azure">{member.role}</p>
                   <p className="text-[13px] leading-[1.4] text-ink-soft">{member.bio}</p>
                 </div>
               </article>
@@ -178,7 +177,7 @@ export default async function AboutPage() {
 
       {/* ----------------------------------------------------------- cta */}
       <section className="py-16 shell lg:py-20">
-        <div className="flex flex-col items-center gap-8 px-8 py-20 text-center rounded-3xl bg-sage-soft md:px-16">
+        <div className="flex flex-col items-center gap-8 px-8 py-20 text-center rounded-3xl bg-azure-soft md:px-16">
           <SectionLabel size="md">Get Involved</SectionLabel>
           <h2 className="max-w-[800px] font-serif text-[34px] font-semibold leading-[1.15] text-ink md:text-[48px]">
             Join our mission to democratize healthcare.

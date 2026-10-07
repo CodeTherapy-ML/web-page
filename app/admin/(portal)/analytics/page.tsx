@@ -75,8 +75,8 @@ export default async function AdminAnalyticsPage() {
                   className={cn(
                     "flex items-center gap-1 rounded px-1.5 py-1 text-[11px] font-semibold",
                     kpi.delta.negative
-                      ? "bg-[#fdf1ea] text-admin-clay"
-                      : "bg-[#ebf2ec] text-admin-sage",
+                      ? "bg-[#e7ecf1] text-admin-navy"
+                      : "bg-[#e2f4fd] text-admin-azure",
                   )}
                 >
                   {kpi.delta.negative ? (
@@ -130,7 +130,7 @@ export default async function AdminAnalyticsPage() {
                   <span className="w-64 truncate text-ink-soft">{page.path || "/"}</span>
                   <span className="h-2 min-w-0 flex-1 overflow-hidden rounded bg-gray-100">
                     <span
-                      className="block h-full rounded bg-admin-sage"
+                      className="block h-full rounded bg-admin-azure"
                       style={{ width: `${(page._count._all / maxPageCount) * 100}%` }}
                     />
                   </span>
@@ -171,7 +171,7 @@ function BreakdownCard({
             <span className="w-32 shrink-0 truncate text-ink-soft">{row.label}</span>
             <span className="h-2 min-w-0 flex-1 overflow-hidden rounded bg-gray-100">
               <span
-                className="block h-full rounded bg-admin-clay"
+                className="block h-full rounded bg-admin-navy"
                 style={{ width: `${(row.count / safeMax) * 100}%` }}
               />
             </span>

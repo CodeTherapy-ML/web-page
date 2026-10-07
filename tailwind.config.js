@@ -26,25 +26,29 @@ module.exports = {
         "geist-mono": ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       colors: {
-        // CodeTherapy v2 palette (Figma: v2-* frames)
-        cream: "#faf8f2",
-        line: "#eae6db",
+        // CodeTherapy brand palette — sampled from public/logo.jpeg:
+        // black field #000000 · "Code" in white · "Therapy" in #00AEEF.
+        // Everything below is that cyan, that black and their tints.
+        cream: "#f4f8fb", // cool paper (an 8% wash of the brand cyan)
+        line: "#dbe6ef",
         ink: {
-          DEFAULT: "#1e2229",
-          deep: "#11141a",
-          soft: "#454d49",
+          DEFAULT: "#0d1117", // the logo's black, lifted just enough for body text
+          deep: "#05080c", // darkest surfaces — footer, admin sidebar
+          soft: "#45586a",
         },
-        sage: {
-          DEFAULT: "#4d6d53",
-          soft: "#eaf0eb",
+        azure: {
+          DEFAULT: "#00719d", // interactive shade — 5.5:1 with white text
+          soft: "#e2f4fd",
+          bright: "#00aeef", // the logo cyan itself, for dark grounds + accents
+          deep: "#005273", // hover / pressed
         },
-        clay: {
-          DEFAULT: "#c4644f",
-          soft: "#f7ede9",
+        navy: {
+          DEFAULT: "#0b3c5d", // the second tone — same hue, deeper and calmer
+          soft: "#e7ecf1",
         },
         // Admin (CMS) palette — cms-* frames. Neutrals are Tailwind grays.
-        "admin-sage": "#4a7c59",
-        "admin-clay": "#c2703e",
+        "admin-azure": "#00719d",
+        "admin-navy": "#0b3c5d",
         "admin-danger": "#dc2626",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -66,10 +70,6 @@ module.exports = {
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
-        },
-        custome: {
-          DEFAULT: "#00AEEF",
-          // foreground: "hsl(var(--custome-foreground))",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",

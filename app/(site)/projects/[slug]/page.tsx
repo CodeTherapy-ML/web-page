@@ -56,7 +56,7 @@ export default async function ProjectDetailPage({
         {/* ---------------------------------------------------- breadcrumb */}
         <Link
           href="/projects"
-          className="self-start text-sm font-semibold text-sage hover:underline"
+          className="self-start text-sm font-semibold text-azure hover:underline"
         >
           ← Back to Research
         </Link>
@@ -66,7 +66,7 @@ export default async function ProjectDetailPage({
           <span
             className={cn(
               "self-start rounded-md py-1.5 pl-3.5 pr-2.5 text-xs font-bold uppercase",
-              project.tagTone === "clay" ? "bg-clay-soft text-clay" : "bg-sage-soft text-sage",
+              project.tagTone === "clay" ? "bg-navy-soft text-navy" : "bg-azure-soft text-azure",
             )}
           >
             {project.tag}
@@ -101,7 +101,7 @@ export default async function ProjectDetailPage({
           <div className="flex flex-1 flex-col gap-6">
             {body.html ? (
               <div
-                className="flex flex-col gap-4 text-[17px] leading-[1.75] text-ink-soft [&_h1]:font-serif [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-ink [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-ink [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-ink [&_ul]:list-disc [&_ul]:pl-6 [&_blockquote]:border-l-2 [&_blockquote]:border-sage [&_blockquote]:pl-4 [&_blockquote]:italic [&_img]:max-w-full [&_img]:rounded-xl [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded-xl [&_video]:w-full [&_video]:rounded-xl [&_table]:w-full [&_table]:border-collapse [&_table]:my-2 [&_th]:border [&_th]:border-line [&_th]:bg-sage-soft [&_th]:px-3 [&_th]:py-1.5 [&_th]:text-left [&_td]:border [&_td]:border-line [&_td]:px-3 [&_td]:py-1.5"
+                className="flex flex-col gap-4 text-[17px] leading-[1.75] text-ink-soft [&_h1]:font-serif [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-ink [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-ink [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-ink [&_ul]:list-disc [&_ul]:pl-6 [&_blockquote]:border-l-2 [&_blockquote]:border-azure [&_blockquote]:pl-4 [&_blockquote]:italic [&_img]:max-w-full [&_img]:rounded-xl [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded-xl [&_video]:w-full [&_video]:rounded-xl [&_table]:w-full [&_table]:border-collapse [&_table]:my-2 [&_th]:border [&_th]:border-line [&_th]:bg-azure-soft [&_th]:px-3 [&_th]:py-1.5 [&_th]:text-left [&_td]:border [&_td]:border-line [&_td]:px-3 [&_td]:py-1.5"
                 dangerouslySetInnerHTML={{ __html: body.html }}
               />
             ) : (
@@ -121,7 +121,7 @@ export default async function ProjectDetailPage({
                 href={project.paperUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center gap-2 text-sm font-semibold text-sage transition-colors hover:text-ink"
+                className="group flex items-center gap-2 text-sm font-semibold text-azure transition-colors hover:text-ink"
               >
                 <FileText className="size-4 shrink-0" />
                 <span className="underline underline-offset-2">
@@ -167,7 +167,7 @@ export default async function ProjectDetailPage({
         </section>
 
         {/* --------------------------------------------------------- cta */}
-        <section className="flex flex-col items-center gap-8 rounded-3xl bg-sage-soft px-8 py-20 text-center md:px-16">
+        <section className="flex flex-col items-center gap-8 rounded-3xl bg-azure-soft px-8 py-20 text-center md:px-16">
           <SectionLabel>Interested in this research?</SectionLabel>
           <h2 className="max-w-[843px] font-serif text-[34px] font-semibold leading-[1.15] text-ink md:text-[48px]">
             Let&rsquo;s co-create pathways for diagnostic equity.

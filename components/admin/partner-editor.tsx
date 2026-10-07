@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { savePartner } from "@/app/admin/(portal)/partnerships/actions";
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-sage";
+  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-azure";
 const labelClass = "text-[13px] font-semibold text-gray-600";
 
 function SaveButton() {
@@ -15,7 +15,7 @@ function SaveButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-admin-sage px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+      className="rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
     >
       {pending ? "Saving…" : "Save Partner"}
     </button>
@@ -45,7 +45,7 @@ export default function PartnerEditor({
       {partner && <input type="hidden" name="id" value={partner.id} />}
       <Link
         href="/admin/partnerships"
-        className="self-start text-sm font-semibold text-admin-sage hover:underline"
+        className="self-start text-sm font-semibold text-admin-azure hover:underline"
       >
         ← Back to Partnerships
       </Link>
@@ -113,7 +113,7 @@ export default function PartnerEditor({
               required
               rows={3}
               defaultValue={partner?.body}
-              className="w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-admin-sage"
+              className="w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-admin-azure"
             />
           </label>
         </div>

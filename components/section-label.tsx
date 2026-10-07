@@ -11,6 +11,8 @@ export default function SectionLabel({
   className,
 }: {
   children: React.ReactNode;
+  /** Legacy keys kept because they are persisted on Post/Project rows:
+   *  `sage` = azure, `clay` = navy. */
   tone?: "sage" | "clay";
   size?: "sm" | "md";
   className?: string;
@@ -20,7 +22,7 @@ export default function SectionLabel({
       <span
         className={cn(
           "size-2 shrink-0 rounded",
-          tone === "sage" ? "bg-sage" : "bg-clay",
+          tone === "sage" ? "bg-azure-bright" : "bg-navy",
         )}
       />
       <span
@@ -29,7 +31,7 @@ export default function SectionLabel({
           size === "sm"
             ? "text-xs tracking-[0.18px]"
             : "text-sm tracking-[0.21px]",
-          tone === "sage" ? "text-sage" : "text-clay",
+          tone === "sage" ? "text-azure" : "text-navy",
         )}
       >
         {children}

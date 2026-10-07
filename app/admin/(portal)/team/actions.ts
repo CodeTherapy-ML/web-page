@@ -42,6 +42,10 @@ export async function saveMember(
     if (e instanceof Error && e.message.includes("Unique")) {
       return { error: "That email already has an account." };
     }
+    // P2025: the row was deleted while the form was open
+    if (e instanceof Error && e.message.includes("P2025")) {
+      return { error: "That member no longer exists — refresh the page." };
+    }
     throw e;
   }
 
@@ -52,7 +56,7 @@ export async function saveMember(
 export async function deleteMember(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
-  await db.adminUser.delete({ where: { id } });
+  await db.adminUser.deleteMany({ where: { id } });
   revalidatePath("/admin/team");
 }
 
@@ -64,7 +68,7 @@ const publicMemberInput = z.object({
   flag: z.string().max(8),
   role: z.string().min(1),
   bio: z.string().min(1),
-  photo: z.string().min(1, "Photo URL is required"),
+  photo: z.string().default(""), // optional — empty renders the avatar placeholder
   order: z.coerce.number().int().min(1),
 });
 
@@ -76,10 +80,18 @@ export async function savePublicMember(
   if (!parsed.success) return { error: parsed.error.issues[0].message };
   const { id, ...data } = parsed.data;
 
-  if (id) {
-    await db.teamMember.update({ where: { id }, data });
-  } else {
-    await db.teamMember.create({ data });
+  try {
+    if (id) {
+      await db.teamMember.update({ where: { id }, data });
+    } else {
+      await db.teamMember.create({ data });
+    }
+  } catch (e) {
+    // P2025: the row was deleted while the form was open
+    if (e instanceof Error && e.message.includes("P2025")) {
+      return { error: "That member no longer exists — refresh the page." };
+    }
+    throw e;
   }
 
   revalidateTag("team");
@@ -91,7 +103,7 @@ export async function savePublicMember(
 export async function deletePublicMember(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
-  await db.teamMember.delete({ where: { id } });
+  await db.teamMember.deleteMany({ where: { id } });
   revalidateTag("team");
   revalidatePath("/about");
   revalidatePath("/admin/team");

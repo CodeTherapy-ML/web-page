@@ -67,7 +67,7 @@ export default async function PartnershipsPage() {
             clinical networks, and global health foundations to co-create,
             validate, and scale diagnostic intelligence.
           </p>
-          <Link href="/contact" className="btn-sage group self-start">
+          <Link href="/contact" className="btn-azure group self-start">
             Become a Partner
             <ArrowRight className="size-[14px] transition-transform group-hover:translate-x-1" />
           </Link>
@@ -85,7 +85,7 @@ export default async function PartnershipsPage() {
       </section>
 
       {/* -------------------------------------------- how we collaborate */}
-      <section className="bg-sage-soft">
+      <section className="bg-azure-soft">
         <div className="shell flex flex-col gap-12 py-16 lg:py-20">
           <header className="flex flex-col items-center gap-4 text-center">
             <SectionLabel size="md">Ecosystem</SectionLabel>
@@ -97,8 +97,8 @@ export default async function PartnershipsPage() {
             {collaborationTypes.map(({ icon: Icon, title, body }, i) => (
               <Reveal key={title} delay={i * 80}>
                 <div className="flex h-full flex-col gap-4 rounded-2xl border border-line bg-white p-8">
-                  <span className="flex h-11 w-12 items-center justify-center rounded-xl bg-sage-soft">
-                    <Icon className="size-5 text-sage" />
+                  <span className="flex h-11 w-12 items-center justify-center rounded-xl bg-azure-soft">
+                    <Icon className="size-5 text-azure" />
                   </span>
                   <h3 className="font-serif text-2xl font-semibold text-ink">
                     {title}
@@ -127,7 +127,7 @@ export default async function PartnershipsPage() {
               <article className="flex h-full flex-col gap-4 rounded-2xl border border-line bg-white p-7">
                 <div className="flex items-center justify-between gap-3">
                   <span className="flex items-center gap-2">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sage-soft font-serif text-base font-bold text-sage">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-azure-soft font-serif text-base font-bold text-azure">
                       {partner.initial}
                     </span>
                     <h3 className="font-serif text-xl font-semibold text-ink">
@@ -138,7 +138,7 @@ export default async function PartnershipsPage() {
                     {partner.region}
                   </span>
                 </div>
-                <span className="self-start rounded bg-clay-soft px-2 py-0.5 text-[11px] font-bold uppercase text-clay">
+                <span className="self-start rounded bg-navy-soft px-2 py-0.5 text-[11px] font-bold uppercase text-navy">
                   {partner.type}
                 </span>
                 <p className="text-sm leading-[1.5] text-ink-soft">
@@ -154,7 +154,7 @@ export default async function PartnershipsPage() {
       <section className="border-y border-line bg-white">
         <div className="shell flex flex-col items-center gap-8 py-24 text-center">
           <p
-            className="font-serif text-[72px] font-bold leading-[0.5] text-clay"
+            className="font-serif text-[72px] font-bold leading-[0.5] text-navy"
             aria-hidden
           >
             &ldquo;
@@ -186,7 +186,7 @@ export default async function PartnershipsPage() {
           {pathway.map((step, i) => (
             <Reveal key={step.n} delay={i * 80}>
               <div className="flex h-full flex-col gap-4 rounded-2xl border border-line bg-white p-7">
-                <span className="flex size-10 items-center justify-center rounded-[20px] bg-sage-soft text-sm font-bold text-sage">
+                <span className="flex size-10 items-center justify-center rounded-[20px] bg-azure-soft text-sm font-bold text-azure">
                   {step.n}
                 </span>
                 <h3 className="font-serif text-[22px] font-semibold text-ink">

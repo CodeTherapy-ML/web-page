@@ -8,6 +8,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        // Media library uploads (app/api/media/route.ts).
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
   // For GitHub Pages deployment

@@ -1,9 +1,22 @@
 import nodemailer from "nodemailer";
+import { db } from "@/lib/db";
+import {
+  contactAcknowledgement,
+  contactNotification,
+  leadReply,
+  newsletterNotification,
+  newsletterWelcome,
+  type ContactSubmission,
+  type Mail,
+} from "@/lib/email-templates";
 
 /**
  * SMTP mail service (replaces EmailJS). Transient transport, created per send
  * from env config. When SMTP_* is missing, sends degrade to a console notice —
  * leads are still persisted, they just don't trigger an email.
+ *
+ * Every public form sends two messages: one to the team inbox and one back to
+ * the person who submitted it. Templates live in lib/email-templates.ts.
  */
 
 let transport: nodemailer.Transporter | null = null;
@@ -28,37 +41,118 @@ function getTransport() {
 
 const FROM = process.env.SMTP_FROM || "CodeTherapy <no-reply@codetherapy.ml>";
 
-export async function sendLeadNotification(input: {
-  source: string;
-  name: string;
-  email: string;
-  details: string;
+async function send(options: {
+  to: string;
+  replyTo?: string;
+  mail: Mail;
 }): Promise<boolean> {
   const mailer = getTransport();
   if (!mailer) {
     console.warn(
-      `[email] SMTP not configured — skipping lead notification for ${input.email}. Set SMTP_* in .env.`,
+      `[email] SMTP not configured — skipping "${options.mail.subject}" to ${options.to}. Set SMTP_* in .env.`,
     );
     return false;
   }
-
   try {
     await mailer.sendMail({
       from: FROM,
-      to: process.env.SMTP_USER, // admin inbox — same account
-      replyTo: input.email,
-      subject: `New ${input.source} lead: ${input.name}`,
-      text: [
-        `A new ${input.source} submission came in from ${input.name} (${input.email}).`,
-        "",
-        input.details,
-      ].join("\n"),
+      to: options.to,
+      replyTo: options.replyTo,
+      subject: options.mail.subject,
+      text: options.mail.text,
+      html: options.mail.html,
     });
     return true;
   } catch (e) {
-    console.error("[email] failed to send lead notification:", e);
+    console.error(`[email] failed to send "${options.mail.subject}":`, e);
     return false;
   }
+}
+
+/**
+ * Team inbox + whether form notifications are switched on.
+ * Settings → General owns both (`contactEmail`, `notifications`); SMTP_USER is
+ * the fallback recipient so a fresh install still reaches someone.
+ */
+async function inboxConfig(): Promise<{ to: string | null; notify: boolean }> {
+  try {
+    const [contact, notifications] = await Promise.all([
+      db.setting.findUnique({ where: { key: "contactEmail" } }),
+      db.setting.findUnique({ where: { key: "notifications" } }),
+    ]);
+    const configured = contact?.value;
+    const flags = notifications?.value as { emailOnFormSubmission?: boolean } | null;
+    return {
+      to: (typeof configured === "string" && configured) || process.env.SMTP_USER || null,
+      notify: flags?.emailOnFormSubmission ?? true,
+    };
+  } catch (e) {
+    console.error("[email] could not read mail settings, using SMTP_USER:", e);
+    return { to: process.env.SMTP_USER ?? null, notify: true };
+  }
+}
+
+export type DeliveryResult = { admin: boolean; sender: boolean };
+
+/** Contact form — notifies the team and acknowledges the sender. */
+export async function sendContactEmails(
+  submission: ContactSubmission,
+): Promise<DeliveryResult> {
+  const { to, notify } = await inboxConfig();
+
+  const admin =
+    notify && to
+      ? await send({
+          to,
+          replyTo: submission.email,
+          mail: contactNotification(submission),
+        })
+      : false;
+
+  const sender = await send({
+    to: submission.email,
+    replyTo: to ?? undefined,
+    mail: contactAcknowledgement(submission),
+  });
+
+  return { admin, sender };
+}
+
+/** Newsletter signup — notifies the team and welcomes the subscriber. */
+export async function sendNewsletterEmails(email: string): Promise<DeliveryResult> {
+  const { to, notify } = await inboxConfig();
+
+  const admin =
+    notify && to
+      ? await send({ to, replyTo: email, mail: newsletterNotification(email) })
+      : false;
+
+  const sender = await send({
+    to: email,
+    replyTo: to ?? undefined,
+    mail: newsletterWelcome(email),
+  });
+
+  return { admin, sender };
+}
+
+/**
+ * A reply composed in the admin inbox. Sent straight to the lead's address
+ * with the team inbox as reply-to, so follow-ups come back into Messages.
+ * Returns false (without throwing) when SMTP is not configured.
+ */
+export async function sendLeadReply(input: {
+  to: string;
+  name: string;
+  subject: string;
+  body: string;
+}): Promise<boolean> {
+  const { to: teamInbox } = await inboxConfig();
+  return send({
+    to: input.to,
+    replyTo: teamInbox ?? undefined,
+    mail: leadReply({ name: input.name, subject: input.subject, body: input.body }),
+  });
 }
 
 export async function sendPasswordResetNote(email: string): Promise<boolean> {

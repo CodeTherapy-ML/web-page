@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import BrandMark from "@/components/brand-mark";
 import LoginForm from "./login-form";
 
 export const metadata: Metadata = {
@@ -29,42 +29,28 @@ export default async function AdminLoginPage({
     <div className="flex min-h-screen bg-white font-admin">
       {/* ------------------------------------------------ left branding panel */}
       <div className="relative hidden w-[648px] shrink-0 overflow-hidden bg-ink-deep lg:flex">
-        {/* decorative 2px sage dot grid at ~7% opacity, per the design */}
+        {/* decorative 2px brand-cyan dot grid at ~7% opacity, per the design */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
-            backgroundImage: "radial-gradient(circle, #4a7c59 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(circle, #00aeef 1px, transparent 1px)",
             backgroundSize: "72px 50px",
           }}
         />
         <div className="flex w-full flex-col items-center justify-between px-10 py-16">
           <span className="size-px" />
           <div className="flex flex-col items-center">
-            <div className="flex items-center justify-center gap-3">
-              <span className="relative size-12 shrink-0 overflow-hidden rounded-xl bg-white/10">
-                <Image
-                  src="/v2/logo-mark.png"
-                  alt=""
-                  fill
-                  sizes="48px"
-                  className="object-contain p-1"
-                  priority
-                />
-              </span>
-              <span className="flex flex-col gap-0.5">
-                <span className="font-geist text-2xl font-bold text-white">
-                  CodeTherapy
-                </span>
-                <span className="font-geist-mono text-[11px] font-semibold uppercase text-admin-sage">
-                  Admin Portal
-                </span>
+            <div className="flex flex-col items-center gap-3">
+              <BrandMark size={44} tone="dark" />
+              <span className="font-geist-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-azure-bright">
+                Admin Portal
               </span>
             </div>
           </div>
           <div className="w-full">
             <span className="mb-3 block h-px w-full bg-white/10" />
-            <p className="font-geist text-[13px] leading-[1.5] text-[#8d94a0]">
+            <p className="font-geist text-[13px] leading-[1.5] text-[#8aa0b0]">
               Building resilient clinical diagnostics for the last mile.
             </p>
           </div>

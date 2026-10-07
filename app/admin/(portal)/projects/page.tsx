@@ -23,7 +23,7 @@ export default async function AdminProjectsPage() {
         </div>
         <Link
           href="/admin/projects/new"
-          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
         >
           <Plus className="size-4" />
           Add Project
@@ -61,7 +61,7 @@ export default async function AdminProjectsPage() {
                   <span
                     className={cn(
                       "shrink-0 rounded-xl px-2.5 py-1 text-xs font-semibold",
-                      active ? "bg-[#dcfce7] text-[#15803d]" : "bg-[#eff6ff] text-[#2563eb]",
+                      active ? "bg-[#cbe9fa] text-admin-azure" : "bg-[#e7ecf1] text-admin-navy",
                     )}
                   >
                     {active ? "Active" : "Under Review"}
@@ -71,11 +71,11 @@ export default async function AdminProjectsPage() {
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-start justify-between text-xs font-semibold">
                     <span className="text-[#1e293b]">Completion</span>
-                    <span className="text-admin-sage">{project.completion}%</span>
+                    <span className="text-admin-azure">{project.completion}%</span>
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded bg-[#f1f5f9]">
                     <div
-                      className="h-full rounded bg-admin-sage"
+                      className="h-full rounded bg-admin-azure"
                       style={{ width: `${project.completion}%` }}
                     />
                   </div>
@@ -108,14 +108,14 @@ export default async function AdminProjectsPage() {
                   <div className="flex gap-2">
                     <Link
                       href={`/admin/projects/${project.id}`}
-                      className="rounded border border-gray-200 px-3 py-1.5 text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-sage hover:text-admin-sage"
+                      className="rounded border border-gray-200 px-3 py-1.5 text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-azure hover:text-admin-azure"
                     >
                       Edit
                     </Link>
                     <Link
                       href={`/projects/${project.slug}`}
                       target="_blank"
-                      className="rounded bg-admin-sage px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+                      className="rounded bg-admin-azure px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-azure-deep"
                     >
                       View
                     </Link>

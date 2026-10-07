@@ -22,7 +22,7 @@ export default async function AdminFaqPage() {
         <h1 className="text-2xl font-bold text-ink">FAQ Management</h1>
         <p className="text-sm text-gray-500">
           Manage frequently asked questions displayed on the public FAQ page.{" "}
-          <Link href="/faq" target="_blank" className="font-semibold text-admin-sage hover:underline">
+          <Link href="/faq" target="_blank" className="font-semibold text-admin-azure hover:underline">
             View public page
           </Link>
         </p>

@@ -53,8 +53,8 @@ export default function ProjectsPage({
               className={cn(
                 "rounded-[30px] border px-5 py-2.5 text-sm font-semibold transition-colors",
                 active
-                  ? "border-sage bg-sage text-white"
-                  : "border-line bg-white text-ink-soft hover:border-sage hover:text-sage",
+                  ? "border-azure bg-azure text-white"
+                  : "border-line bg-white text-ink-soft hover:border-azure hover:text-azure",
               )}
             >
               {chip}
@@ -96,7 +96,7 @@ export default function ProjectsPage({
 
       {/* ----------------------------------------------------------- cta */}
       <section className="shell pb-20">
-        <div className="flex flex-col items-center gap-8 rounded-3xl bg-clay-soft p-8 text-center md:p-16">
+        <div className="flex flex-col items-center gap-8 rounded-3xl bg-navy-soft p-8 text-center md:p-16">
           <SectionLabel tone="clay" size="md">
             Collaboration
           </SectionLabel>
@@ -110,7 +110,7 @@ export default function ProjectsPage({
           </p>
           <Link
             href="/contact"
-            className="btn-v2 group border-clay bg-clay text-white hover:bg-[#ab5442] hover:border-[#ab5442]"
+            className="btn-v2 group border-navy bg-navy text-white hover:border-[#072b43] hover:bg-[#072b43]"
           >
             Propose a Collaboration
             <ArrowRight className="size-[14px] transition-transform group-hover:translate-x-1" />

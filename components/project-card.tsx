@@ -47,8 +47,8 @@ export default function ProjectCard({
             className={cn(
               "rounded px-[10px] py-1 text-[11px] font-bold uppercase",
               project.tagTone === "clay"
-                ? "bg-clay-soft text-clay"
-                : "bg-sage-soft text-sage",
+                ? "bg-navy-soft text-navy"
+                : "bg-azure-soft text-azure",
             )}
           >
             {project.tag}
@@ -79,13 +79,13 @@ export default function ProjectCard({
         {detailed ? (
           <div className="mt-auto flex flex-col gap-4">
             <span className="block h-px w-full bg-line" />
-            <span className="flex items-center gap-1 text-[13px] font-semibold text-sage">
+            <span className="flex items-center gap-1 text-[13px] font-semibold text-azure">
               Read more
               <ArrowRight className="size-[14px] transition-transform group-hover:translate-x-1" />
             </span>
           </div>
         ) : (
-          <span className="mt-auto flex items-center gap-1 pt-2 text-sm font-semibold text-sage">
+          <span className="mt-auto flex items-center gap-1 pt-2 text-sm font-semibold text-azure">
             Read more
             <ArrowRight className="size-[14px] transition-transform group-hover:translate-x-1" />
           </span>

@@ -8,6 +8,7 @@ import { Check, Github, Linkedin, Twitter, Youtube } from "lucide-react";
 import { clearCache, deleteSiteContent, pruneAnalytics, saveGeneralSettings } from "@/app/admin/(portal)/settings/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import ConfirmDialog from "@/components/admin/confirm-dialog";
 
 type Settings = {
   siteName: string;
@@ -32,7 +33,7 @@ type Settings = {
 const TABS = ["General", "SEO", "Users", "Integrations", "Backups"];
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-sage";
+  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-azure";
 const labelClass = "text-[13px] font-semibold text-gray-600";
 
 function Checkbox({
@@ -56,7 +57,7 @@ function Checkbox({
         aria-hidden
         className={cn(
           "flex size-[18px] shrink-0 items-center justify-center rounded border transition-colors",
-          checked ? "border-admin-sage bg-admin-sage" : "border-gray-400 bg-transparent",
+          checked ? "border-admin-azure bg-admin-azure" : "border-gray-400 bg-transparent",
         )}
       >
         {checked && <Check className="size-3 text-white" strokeWidth={3} />}
@@ -69,6 +70,8 @@ function Checkbox({
 export default function SettingsManager({ settings }: { settings: Settings }) {
   const { toast } = useToast();
   const [tab, setTab] = useState("General");
+  const [confirmNuke, setConfirmNuke] = useState(false);
+  const [nukePending, setNukePending] = useState(false);
   const [formState, formAction] = useFormState(saveGeneralSettings, { ok: true });
 
   // General form state — seeded from DB settings.
@@ -118,7 +121,7 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
               className={cn(
                 "border-b-2 pb-3 text-sm transition-colors",
                 tab === t
-                  ? "border-admin-sage font-bold text-admin-sage"
+                  ? "border-admin-azure font-bold text-admin-azure"
                   : "border-transparent font-medium text-gray-600 hover:text-ink",
               )}
             >
@@ -151,7 +154,7 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
                     name="siteDescription"
                     value={siteDescription}
                     onChange={(e) => setSiteDescription(e.target.value)}
-                    className="h-20 w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-3 text-sm text-ink outline-none focus:border-admin-sage"
+                    className="h-20 w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-3 text-sm text-ink outline-none focus:border-admin-azure"
                   />
                 </label>
                 <label className="flex flex-col gap-1.5">
@@ -164,14 +167,8 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
                   />
                 </label>
                 <div className="flex items-center gap-4 border-t border-gray-100 pt-4">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-gray-50">
-                    <Image
-                      src="/v2/logo-mark.png"
-                      alt=""
-                      width={18}
-                      height={18}
-                      className="object-contain"
-                    />
+                  <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                    <Image src="/icon.png" alt="" width={28} height={28} className="rounded-md" />
                   </span>
                   <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <span className="text-[13px] font-semibold text-ink">Favicon</span>
@@ -349,39 +346,53 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
                 </div>
               </section>
 
-              <section className="flex flex-col gap-4 rounded-xl border-[1.5px] border-dashed border-admin-clay bg-white p-5">
-                <h2 className="font-bold text-admin-clay">Danger Zone</h2>
+              <section className="flex flex-col gap-4 rounded-xl border-[1.5px] border-dashed border-admin-navy bg-white p-5">
+                <h2 className="font-bold text-admin-navy">Danger Zone</h2>
                 <p className="text-[13px] text-gray-600">
                   Actions are permanent. Please proceed with utmost caution.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <form action={clearCache}>
-                    <button className="h-9 rounded-lg border border-gray-200 px-3.5 text-[13px] font-semibold text-gray-600 transition-colors hover:border-admin-sage hover:text-admin-sage">
+                    <button className="h-9 rounded-lg border border-gray-200 px-3.5 text-[13px] font-semibold text-gray-600 transition-colors hover:border-admin-azure hover:text-admin-azure">
                       Clear Cache
                     </button>
                   </form>
                   <Link
                     href="/admin/api/export"
-                    className="flex h-9 items-center rounded-lg border border-gray-200 px-3.5 text-[13px] font-semibold text-gray-600 transition-colors hover:border-admin-sage hover:text-admin-sage"
+                    className="flex h-9 items-center rounded-lg border border-gray-200 px-3.5 text-[13px] font-semibold text-gray-600 transition-colors hover:border-admin-azure hover:text-admin-azure"
                   >
                     Export All Data
                   </Link>
-                  <form
-                    action={async () => {
-                      if (confirm("Delete ALL site content? This cannot be undone.")) {
-                        await deleteSiteContent();
-                        toast({ title: "Site content deleted", variant: "destructive" });
-                      }
-                    }}
+                  <button
+                    type="button"
+                    onClick={() => setConfirmNuke(true)}
+                    className="h-9 rounded-lg border border-red-600 bg-[#fee2e2] px-3.5 text-[13px] font-semibold text-red-600 transition-colors hover:bg-[#fecaca]"
                   >
-                    <button className="h-9 rounded-lg border border-red-600 bg-[#fee2e2] px-3.5 text-[13px] font-semibold text-red-600 transition-colors hover:bg-[#fecaca]">
-                      Delete Site
-                    </button>
-                  </form>
+                    Delete Site
+                  </button>
                 </div>
               </section>
             </div>
           </div>
+
+          <ConfirmDialog
+            open={confirmNuke}
+            title="Delete ALL site content?"
+            description="Every project, article, team member, partnership, FAQ and media record is removed. This cannot be undone — export your data first."
+            confirmLabel="Delete everything"
+            pending={nukePending}
+            onCancel={() => setConfirmNuke(false)}
+            onConfirm={async () => {
+              setNukePending(true);
+              try {
+                await deleteSiteContent();
+                toast({ title: "Site content deleted", variant: "destructive" });
+              } finally {
+                setNukePending(false);
+                setConfirmNuke(false);
+              }
+            }}
+          />
 
           {/* Full-width unsaved-changes bar — only when the form is dirty */}
           {dirty && (
@@ -423,7 +434,7 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
             </div>
             <div className="flex justify-between border-b border-gray-100 pb-2">
               <dt className="text-gray-500">Sitemap</dt>
-              <dd className="font-semibold text-admin-sage">
+              <dd className="font-semibold text-admin-azure">
                 <Link href="/sitemap.xml" target="_blank" className="hover:underline">
                   /sitemap.xml
                 </Link>
@@ -460,8 +471,8 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
                       className={cn(
                         "rounded px-2 py-0.5 text-xs font-semibold",
                         user.status === "active"
-                          ? "bg-[#dcfce7] text-[#15803d]"
-                          : "bg-[#fdf1ea] text-admin-clay",
+                          ? "bg-[#e2f4fd] text-admin-azure"
+                          : "bg-[#e7ecf1] text-admin-navy",
                       )}
                     >
                       {user.status === "active" ? "Active" : "On Leave"}
@@ -484,13 +495,13 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
               <span
                 className={cn(
                   "flex items-center gap-1.5 text-xs font-semibold",
-                  settings.integrations.smtp ? "text-admin-sage" : "text-admin-clay",
+                  settings.integrations.smtp ? "text-admin-azure" : "text-admin-navy",
                 )}
               >
                 <span
                   className={cn(
                     "size-1.5 rounded-full",
-                    settings.integrations.smtp ? "bg-admin-sage" : "bg-admin-clay",
+                    settings.integrations.smtp ? "bg-admin-azure" : "bg-admin-navy",
                   )}
                 />
                 {settings.integrations.smtp ? "Connected" : "Not configured"}
@@ -501,13 +512,13 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
               <span
                 className={cn(
                   "flex items-center gap-1.5 text-xs font-semibold",
-                  settings.integrations.cloudinary ? "text-admin-sage" : "text-admin-clay",
+                  settings.integrations.cloudinary ? "text-admin-azure" : "text-admin-navy",
                 )}
               >
                 <span
                   className={cn(
                     "size-1.5 rounded-full",
-                    settings.integrations.cloudinary ? "bg-admin-sage" : "bg-admin-clay",
+                    settings.integrations.cloudinary ? "bg-admin-azure" : "bg-admin-navy",
                   )}
                 />
                 {settings.integrations.cloudinary ? "Connected" : "Not configured"}
@@ -530,7 +541,7 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
           <div className="flex flex-col gap-3">
             <Link
               href="/admin/api/export"
-              className="flex w-fit items-center gap-2 rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:border-admin-sage hover:text-admin-sage"
+              className="flex w-fit items-center gap-2 rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:border-admin-azure hover:text-admin-azure"
             >
               Export All Data (JSON)
             </Link>
@@ -543,12 +554,12 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
                 });
               }}
             >
-              <button className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:border-admin-sage hover:text-admin-sage">
+              <button className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:border-admin-azure hover:text-admin-azure">
                 Prune Analytics (6-month retention)
               </button>
             </form>
             <form action={clearCache}>
-              <button className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:border-admin-sage hover:text-admin-sage">
+              <button className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:border-admin-azure hover:text-admin-azure">
                 Clear Cache
               </button>
             </form>
@@ -565,7 +576,7 @@ function SaveChangesButton({ ok }: { ok: boolean }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-admin-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+      className="rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
     >
       {pending ? "Saving…" : "Save Changes"}
     </button>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useRef, useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
 import {
   deleteMember,
@@ -10,7 +10,11 @@ import {
   savePublicMember,
   saveRolePermissions,
 } from "@/app/admin/(portal)/team/actions";
+import ImageUploadField from "@/components/admin/image-upload-field";
+import MemberAvatar from "@/components/member-avatar";
+import DeleteButton from "@/components/admin/delete-button";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 
 type Member = {
   id: string;
@@ -33,7 +37,7 @@ type PublicMember = {
 };
 
 const inputClass =
-  "h-9 w-full rounded-lg border border-gray-200 bg-white px-2.5 text-sm text-ink outline-none focus:border-admin-sage";
+  "h-9 w-full rounded-lg border border-gray-200 bg-white px-2.5 text-sm text-ink outline-none focus:border-admin-azure";
 
 const PERMISSIONS = ["create", "edit", "publish", "delete"] as const;
 const ROLES = [
@@ -79,7 +83,7 @@ export default function TeamManager({
               setAdding(true);
               setEditing(null);
             }}
-            className="flex items-center gap-2 rounded-lg bg-admin-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+            className="flex items-center gap-2 rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
           >
             <Plus className="size-4" />
             Add Member
@@ -88,6 +92,7 @@ export default function TeamManager({
 
         {(adding || editing) && (
           <MemberForm
+            key={editing?.id ?? "new"}
             member={editing}
             onClose={() => {
               setAdding(false);
@@ -127,8 +132,8 @@ export default function TeamManager({
                       className={cn(
                         "rounded px-2 py-1 text-xs font-semibold",
                         member.status === "active"
-                          ? "bg-[#dcfce7] text-[#15803d]"
-                          : "bg-[#fdf1ea] text-admin-clay",
+                          ? "bg-[#e2f4fd] text-admin-azure"
+                          : "bg-[#e7ecf1] text-admin-navy",
                       )}
                     >
                       {member.status === "active" ? "Active" : "On Leave"}
@@ -147,16 +152,16 @@ export default function TeamManager({
                       >
                         <Pencil className="size-3.5" />
                       </button>
-                      <form action={deleteMember}>
-                        <input type="hidden" name="id" value={member.id} />
-                        <button
-                          type="submit"
-                          aria-label={`Delete ${member.name}`}
-                          className="rounded bg-gray-100 p-2 text-gray-500 transition-colors hover:text-red-600"
-                        >
-                          <Trash2 className="size-3.5" />
-                        </button>
-                      </form>
+                      <DeleteButton
+                        action={deleteMember}
+                        id={member.id}
+                        title={`Delete ${member.name}?`}
+                        description="Their account and access to this portal are removed. This cannot be undone."
+                        ariaLabel={`Delete ${member.name}`}
+                        className="rounded bg-gray-100 p-2 text-gray-500 transition-colors hover:text-red-600"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </DeleteButton>
                     </div>
                   </td>
                 </tr>
@@ -177,22 +182,19 @@ export default function TeamManager({
         </div>
 
         {editingPublic !== null && (
-          <PublicMemberForm member={editingPublic} onClose={() => setEditingPublic(null)} />
+          <PublicMemberForm key={editingPublic?.id ?? "new"} member={editingPublic} onClose={() => setEditingPublic(null)} />
         )}
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {publicMembers.map((m) => (
             <article key={m.id} className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4">
               <div className="flex items-center gap-3">
-                <span className="relative size-11 shrink-0 overflow-hidden rounded-full bg-gray-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={m.photo} alt={m.name} className="h-full w-full object-cover" />
-                </span>
+                <MemberAvatar name={m.name} src={m.photo} className="size-11 rounded-full" />
                 <div className="min-w-0">
                   <h3 className="truncate font-semibold text-ink">
                     {m.name} <span aria-hidden>{m.flag}</span>
                   </h3>
-                  <p className="text-xs font-semibold uppercase text-admin-sage">{m.role}</p>
+                  <p className="text-xs font-semibold uppercase text-admin-azure">{m.role}</p>
                 </div>
               </div>
               <p className="line-clamp-2 text-xs text-gray-500">{m.bio}</p>
@@ -207,16 +209,17 @@ export default function TeamManager({
                   >
                     <Pencil className="size-3.5" />
                   </button>
-                  <form action={deletePublicMember}>
-                    <input type="hidden" name="id" value={m.id} />
-                    <button
-                      type="submit"
-                      aria-label={`Delete ${m.name}`}
-                      className="rounded bg-gray-100 p-2 text-gray-500 transition-colors hover:text-red-600"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </button>
-                  </form>
+                  <DeleteButton
+                    action={deletePublicMember}
+                    id={m.id}
+                    title={`Remove ${m.name} from the public team?`}
+                    description="They disappear from the About page immediately. This cannot be undone."
+                    confirmLabel="Remove"
+                    ariaLabel={`Delete ${m.name}`}
+                    className="rounded bg-gray-100 p-2 text-gray-500 transition-colors hover:text-red-600"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </DeleteButton>
                 </div>
               </div>
             </article>
@@ -236,7 +239,7 @@ export default function TeamManager({
               order: publicMembers.length + 1,
             })
           }
-          className="mt-4 flex items-center gap-1.5 rounded-lg border border-dashed border-gray-300 px-3 py-2 text-xs font-semibold text-gray-500 transition-colors hover:border-admin-sage hover:text-admin-sage"
+          className="mt-4 flex items-center gap-1.5 rounded-lg border border-dashed border-gray-300 px-3 py-2 text-xs font-semibold text-gray-500 transition-colors hover:border-admin-azure hover:text-admin-azure"
         >
           <Plus className="size-3.5" />
           Add Team Member
@@ -283,7 +286,7 @@ export default function TeamManager({
                             }))
                           }
                           aria-label={`${role.label} can ${perm}`}
-                          className="size-4 rounded accent-admin-sage"
+                          className="size-4 rounded accent-admin-azure"
                         />
                       </td>
                     ))}
@@ -297,7 +300,7 @@ export default function TeamManager({
           </div>
           <button
             type="submit"
-            className="mt-4 rounded-lg bg-admin-sage px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+            className="mt-4 rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
           >
             Save Permissions
           </button>
@@ -315,14 +318,27 @@ function MemberForm({
   onClose: () => void;
 }) {
   const [state, formAction] = useFormState(saveMember, { error: null });
+  const submittedRef = useRef(false);
+  const { toast } = useToast();
+
+  // Close only when the save actually succeeded; on error the form stays open
+  // so the returned message is visible.
+  useEffect(() => {
+    if (!submittedRef.current) return;
+    submittedRef.current = false;
+    if (state.error === null) {
+      toast({ title: member ? "Member updated" : "Member added" });
+      onClose();
+    }
+  }, [state, member, onClose, toast]);
 
   return (
     <form
       action={(fd) => {
+        submittedRef.current = true;
         formAction(fd);
-        onClose();
       }}
-      className="mb-4 rounded-xl border border-admin-sage/40 bg-[#f4f8f5] p-5"
+      className="mb-4 rounded-xl border border-admin-azure/40 bg-[#f4f8fb] p-5"
     >
       {member && <input type="hidden" name="id" value={member.id} />}
       <div className="mb-3 flex items-center justify-between">
@@ -370,12 +386,7 @@ function MemberForm({
         </label>
       </div>
       {state.error && <p className="mt-2 text-xs font-semibold text-red-600">{state.error}</p>}
-      <button
-        type="submit"
-        className="mt-4 rounded-lg bg-admin-sage px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
-      >
-        {member ? "Save Changes" : "Add Member"}
-      </button>
+      <SubmitButton>{member ? "Save Changes" : "Add Member"}</SubmitButton>
     </form>
   );
 }
@@ -389,11 +400,27 @@ function PublicMemberForm({
   onClose: () => void;
 }) {
   const [state, formAction] = useFormState(savePublicMember, { error: null });
+  const submittedRef = useRef(false);
+  const { toast } = useToast();
+
+  // Close only when the save actually succeeded; on error the form stays open
+  // so the returned message is visible.
+  useEffect(() => {
+    if (!submittedRef.current) return;
+    submittedRef.current = false;
+    if (state.error === null) {
+      toast({ title: member?.id ? "Team member updated" : "Team member added" });
+      onClose();
+    }
+  }, [state, member, onClose, toast]);
 
   return (
     <form
-      action={formAction}
-      className="mb-4 rounded-xl border border-admin-sage/40 bg-[#f4f8f5] p-5"
+      action={(fd) => {
+        submittedRef.current = true;
+        formAction(fd);
+      }}
+      className="mb-4 rounded-xl border border-admin-azure/40 bg-[#f4f8fb] p-5"
     >
       {member?.id ? <input type="hidden" name="id" value={member.id} /> : null}
       <div className="mb-3 flex items-center justify-between">
@@ -418,25 +445,39 @@ function PublicMemberForm({
           <input name="role" required defaultValue={member?.role} placeholder="e.g. CTO" className={inputClass} />
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-xs font-semibold text-gray-600">Photo URL</span>
-          <input name="photo" required defaultValue={member?.photo} placeholder="/v2/team-1.png" className={inputClass} />
-        </label>
-        <label className="flex flex-col gap-1">
           <span className="text-xs font-semibold text-gray-600">Order</span>
           <input type="number" name="order" min={1} defaultValue={member?.order ?? 1} className={inputClass} />
         </label>
+        <ImageUploadField
+          name="photo"
+          label="Photo"
+          defaultValue={member?.photo}
+          hint="Optional — members without a photo get the avatar placeholder."
+          previewClassName="h-36 w-36"
+          placeholder="avatar"
+          className="col-span-2 md:col-span-1"
+        />
         <label className="col-span-2 flex flex-col gap-1 md:col-span-3">
           <span className="text-xs font-semibold text-gray-600">Bio</span>
           <input name="bio" required defaultValue={member?.bio} className={inputClass} />
         </label>
       </div>
       {state.error && <p className="mt-2 text-xs font-semibold text-red-600">{state.error}</p>}
-      <button
-        type="submit"
-        className="mt-4 rounded-lg bg-admin-sage px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
-      >
-        {member?.id ? "Save Changes" : "Add Member"}
-      </button>
+      <SubmitButton>{member?.id ? "Save Changes" : "Add Member"}</SubmitButton>
     </form>
+  );
+}
+
+/** Submits the form and disables itself while the server action is in flight. */
+function SubmitButton({ children }: { children: React.ReactNode }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="mt-4 rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
+    >
+      {pending ? "Saving…" : children}
+    </button>
   );
 }

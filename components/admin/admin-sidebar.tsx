@@ -10,6 +10,7 @@ import {
   Home,
   Image,
   Link2,
+  Mail,
   Settings,
   Users,
 } from "lucide-react";
@@ -17,7 +18,7 @@ import { cn } from "@/lib/utils";
 import BrandMark from "@/components/brand-mark";
 
 /**
- * `sidebar` from cms-dashboard-overview — 240px, dark #1e2229, sage active item.
+ * `sidebar` from cms-dashboard-overview — 240px, dark #0d1117, sage active item.
  * Icons are the lucide matches of the design's exported SVGs.
  */
 const nav = [
@@ -25,6 +26,7 @@ const nav = [
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3, exact: false },
   { label: "Articles", href: "/admin/articles", icon: FileText, exact: false },
   { label: "Projects", href: "/admin/projects", icon: Folder, exact: false },
+  { label: "Messages", href: "/admin/messages", icon: Mail, exact: false },
   { label: "Team", href: "/admin/team", icon: Users, exact: false },
   { label: "Partnerships", href: "/admin/partnerships", icon: Link2, exact: false },
   { label: "FAQ", href: "/admin/faq", icon: HelpCircle, exact: false },
@@ -32,14 +34,21 @@ const nav = [
   { label: "Settings", href: "/admin/settings", icon: Settings, exact: false },
 ];
 
-export default function AdminSidebar({ version }: { version: string }) {
+export default function AdminSidebar({
+  version,
+  newLeads,
+}: {
+  version: string;
+  /** Unread Lead rows — badged on the Messages item, same source as the bell. */
+  newLeads: number;
+}) {
   const pathname = usePathname();
 
   return (
     <aside className="flex w-[240px] shrink-0 flex-col gap-8 self-stretch bg-ink-deep px-4 py-6">
-      <div className="flex items-center gap-3">
-        <BrandMark size={32} textClass="font-sans font-bold text-white text-[16px]" />
-        <span className="w-fit rounded bg-[#2d323e] px-1.5 py-0.5 text-[10px] font-semibold uppercase text-admin-sage">
+      <div className="flex flex-col items-start gap-2.5 px-1">
+        <BrandMark size={26} tone="dark" />
+        <span className="w-fit rounded bg-[#12212b] px-1.5 py-0.5 text-[10px] font-semibold uppercase text-azure-bright">
           Admin Panel
         </span>
       </div>
@@ -55,12 +64,20 @@ export default function AdminSidebar({ version }: { version: string }) {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors",
                 active
-                  ? "bg-admin-sage font-semibold text-white"
+                  ? "bg-admin-azure font-semibold text-white"
                   : "font-medium text-[#d1d5db] hover:bg-white/5 hover:text-white",
               )}
             >
               <Icon className="size-[18px] shrink-0" />
               <span className="flex-1">{label}</span>
+              {href === "/admin/messages" && newLeads > 0 && (
+                <span
+                  className="flex min-w-[20px] items-center justify-center rounded-full bg-azure-bright px-1.5 py-0.5 text-[10px] font-bold text-ink-deep"
+                  aria-label={`${newLeads} unread`}
+                >
+                  {newLeads > 99 ? "99+" : newLeads}
+                </span>
+              )}
             </Link>
           );
         })}

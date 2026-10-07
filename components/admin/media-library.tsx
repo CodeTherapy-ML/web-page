@@ -7,6 +7,7 @@ import { Copy, FileText, LayoutGrid, List, Play, Trash2, Upload } from "lucide-r
 import { useToast } from "@/components/ui/use-toast";
 import { cleanupUnusedAssets } from "@/app/admin/(portal)/media/actions";
 import { cn } from "@/lib/utils";
+import ConfirmDialog from "@/components/admin/confirm-dialog";
 
 type Asset = {
   id: string;
@@ -35,6 +36,9 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
   const [uploading, setUploading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<"grid" | "list">("grid");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmCleanup, setConfirmCleanup] = useState(false);
+  const [deletePending, setDeletePending] = useState(false);
 
   const selected = assets.find((a) => a.id === selectedId) ?? assets[0];
 
@@ -119,7 +123,7 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
           {unusedCount > 0 && (
             <button
               type="button"
-              onClick={cleanupUnused}
+              onClick={() => setConfirmCleanup(true)}
               className="rounded-lg border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
             >
               Delete {unusedCount} unused file{unusedCount === 1 ? "" : "s"}
@@ -129,7 +133,7 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
             type="button"
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
-            className="flex items-center gap-2 rounded-lg bg-admin-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+            className="flex items-center gap-2 rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
           >
             <Upload className="size-4" />
             {uploading ? "Uploading…" : "Upload Files"}
@@ -158,7 +162,7 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
           Storage Used: {formatBytes(stats.bytes)} / 10 GB
           <span className="h-1.5 w-[140px] overflow-hidden rounded bg-gray-100">
             <span
-              className="block h-full rounded bg-admin-sage"
+              className="block h-full rounded bg-admin-azure"
               style={{ width: `${Math.min(100, (stats.bytes / (10 * 1024 * 1024 * 1024)) * 100)}%` }}
             />
           </span>
@@ -211,10 +215,10 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
                   onClick={() => setSelectedId(asset.id)}
                   className={cn(
                     "flex flex-col gap-2 rounded-xl border bg-white p-2 text-left transition-colors",
-                    selectedId === asset.id ? "border-2 border-admin-sage" : "border-gray-200 hover:border-gray-300",
+                    selectedId === asset.id ? "border-2 border-admin-azure" : "border-gray-200 hover:border-gray-300",
                   )}
                 >
-                  <span className="relative flex h-24 w-full items-center justify-center overflow-hidden rounded-lg bg-sage-soft">
+                  <span className="relative flex h-24 w-full items-center justify-center overflow-hidden rounded-lg bg-azure-soft">
                     {asset.type === "image" ? (
                       <Image
                         src={asset.url}
@@ -235,7 +239,7 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
                         {asset.publicId.split("/").pop()}.{asset.format}
                       </span>
                       {!asset.used && (
-                        <span className="shrink-0 rounded bg-[#fdf1ea] px-1.5 py-0.5 text-[10px] font-bold uppercase text-admin-clay">
+                        <span className="shrink-0 rounded bg-[#e7ecf1] px-1.5 py-0.5 text-[10px] font-bold uppercase text-admin-navy">
                           Unused
                         </span>
                       )}
@@ -280,7 +284,7 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
           <h2 className="font-bold text-ink">File Details</h2>
           {selected ? (
             <>
-              <div className="relative flex h-[160px] w-full items-center justify-center overflow-hidden rounded-lg bg-sage-soft">
+              <div className="relative flex h-[160px] w-full items-center justify-center overflow-hidden rounded-lg bg-azure-soft">
                 {selected.type === "image" ? (
                   <Image
                     src={selected.url}
@@ -321,7 +325,7 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
                   <p
                     className={
                       "text-[13px] font-semibold " +
-                      (selected.used ? "text-admin-sage" : "text-admin-clay")
+                      (selected.used ? "text-admin-azure" : "text-admin-navy")
                     }
                   >
                     {selected.used ? "Referenced in content" : "Unused — safe to delete"}
@@ -344,14 +348,14 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
                 <button
                   type="button"
                   onClick={() => copyUrl(selected.url)}
-                  className="flex h-[38px] items-center justify-center gap-2 rounded-lg border border-gray-200 bg-gray-50 text-[13px] font-semibold text-gray-600 transition-colors hover:border-admin-sage hover:text-admin-sage"
+                  className="flex h-[38px] items-center justify-center gap-2 rounded-lg border border-gray-200 bg-gray-50 text-[13px] font-semibold text-gray-600 transition-colors hover:border-admin-azure hover:text-admin-azure"
                 >
                   <Copy className="size-3.5" />
                   Copy URL
                 </button>
                 <button
                   type="button"
-                  onClick={() => remove(selected.id)}
+                  onClick={() => setConfirmDelete(true)}
                   className="flex h-[38px] items-center justify-center gap-2 rounded-lg border border-red-600 bg-[#fee2e2] text-[13px] font-semibold text-red-600 transition-colors hover:bg-[#fecaca]"
                 >
                   <Trash2 className="size-3.5" />
@@ -364,6 +368,43 @@ export default function MediaLibrary({ assets }: { assets: Asset[] }) {
           )}
         </aside>
       </div>
+
+      <ConfirmDialog
+        open={confirmDelete}
+        title="Delete this file?"
+        description={
+          selected?.alt || selected?.url
+            ? `"${selected.alt || selected.url}" is removed from Cloudinary and the library.`
+            : undefined
+        }
+        pending={deletePending}
+        onCancel={() => setConfirmDelete(false)}
+        onConfirm={async () => {
+          setDeletePending(true);
+          try {
+            await remove(selected.id);
+          } finally {
+            setDeletePending(false);
+            setConfirmDelete(false);
+          }
+        }}
+      />
+      <ConfirmDialog
+        open={confirmCleanup}
+        title={`Delete ${unusedCount} unused file${unusedCount === 1 ? "" : "s"}?`}
+        description="Files referenced by no project, article or page are removed from Cloudinary and the library."
+        pending={deletePending}
+        onCancel={() => setConfirmCleanup(false)}
+        onConfirm={async () => {
+          setDeletePending(true);
+          try {
+            await cleanupUnused();
+          } finally {
+            setDeletePending(false);
+            setConfirmCleanup(false);
+          }
+        }}
+      />
 
       <input
         ref={fileRef}

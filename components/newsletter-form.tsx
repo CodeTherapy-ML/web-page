@@ -49,9 +49,9 @@ export default function NewsletterForm() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email address"
         aria-label="Email address"
-        className="h-12 flex-1 rounded-[30px] border border-line bg-cream px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-sage"
+        className="h-12 flex-1 rounded-[30px] border border-line bg-cream px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-azure"
       />
-      <button type="submit" disabled={pending} className="btn-sage shrink-0 disabled:opacity-60">
+      <button type="submit" disabled={pending} className="btn-azure shrink-0 disabled:opacity-60">
         {pending ? "Subscribing…" : "Subscribe"}
       </button>
     </form>

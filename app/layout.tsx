@@ -30,11 +30,30 @@ const inter = Inter({
 const geist = GeistSans;
 const geistMono = GeistMono;
 
+const description =
+  "Pioneering open-source AI diagnostics designed for and with frontline health workers in underserved communities across Africa and globally.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://codetherapy.ml"),
   title: "CodeTherapy",
-  description:
-    "Pioneering open-source AI diagnostics designed for and with frontline health workers in underserved communities across Africa and globally.",
+  description,
+  openGraph: {
+    title: "CodeTherapy",
+    description,
+    siteName: "CodeTherapy",
+    type: "website",
+    images: [{ url: "/brand/og.png", width: 1200, height: 630, alt: "CodeTherapy" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CodeTherapy",
+    description,
+    images: ["/brand/og.png"],
+  },
 };
+
+/** The logo cyan — tints the browser chrome on mobile. */
+export const viewport = { themeColor: "#00aeef" };
 
 export default function RootLayout({
   children,

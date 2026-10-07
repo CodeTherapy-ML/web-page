@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { deletePartner } from "./actions";
+import DeleteButton from "@/components/admin/delete-button";
 
 export const metadata = { title: "Partnerships — CodeTherapy Admin" };
 
@@ -38,7 +39,7 @@ export default async function AdminPartnershipsPage({
         </div>
         <Link
           href="/admin/partnerships/new"
-          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
         >
           <Plus className="size-4" />
           Add Partner
@@ -57,7 +58,7 @@ export default async function AdminPartnershipsPage({
               className={cn(
                 "border-b-2 px-4 py-2.5 text-sm font-medium transition-colors",
                 category === cat
-                  ? "border-admin-sage font-semibold text-admin-sage"
+                  ? "border-admin-azure font-semibold text-admin-azure"
                   : "border-transparent text-gray-500 hover:text-ink",
               )}
             >
@@ -75,7 +76,7 @@ export default async function AdminPartnershipsPage({
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <span className="flex size-9 items-center justify-center rounded-lg bg-sage-soft font-serif text-base font-bold text-sage">
+                <span className="flex size-9 items-center justify-center rounded-lg bg-azure-soft font-serif text-base font-bold text-azure">
                   {partner.initial}
                 </span>
                 <div>
@@ -89,8 +90,8 @@ export default async function AdminPartnershipsPage({
                 className={cn(
                   "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold",
                   partner.affiliationStatus === "Active"
-                    ? "bg-[#dcfce7] text-[#15803d]"
-                    : "bg-[#fdf1ea] text-admin-clay",
+                    ? "bg-[#e2f4fd] text-admin-azure"
+                    : "bg-[#e7ecf1] text-admin-navy",
                 )}
               >
                 {partner.affiliationStatus}
@@ -113,27 +114,27 @@ export default async function AdminPartnershipsPage({
             <div className="mt-auto flex items-center gap-2">
               <Link
                 href={`/admin/partnerships/${partner.id}`}
-                className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-center text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-sage hover:text-admin-sage"
+                className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-center text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-azure hover:text-admin-azure"
               >
                 Edit
               </Link>
               <Link
                 href={`/partnerships`}
                 target="_blank"
-                className="flex-1 rounded-lg bg-admin-sage px-3 py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+                className="flex-1 rounded-lg bg-admin-azure px-3 py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-azure-deep"
               >
                 View
               </Link>
-              <form action={deletePartner}>
-                <input type="hidden" name="id" value={partner.id} />
-                <button
-                  type="submit"
-                  aria-label={`Delete ${partner.name}`}
-                  className="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
-                >
-                  Delete
-                </button>
-              </form>
+              <DeleteButton
+                action={deletePartner}
+                id={partner.id}
+                title={`Delete ${partner.name}?`}
+                description="The partnership is removed from the public page. This cannot be undone."
+                ariaLabel={`Delete ${partner.name}`}
+                className="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
+              >
+                Delete
+              </DeleteButton>
             </div>
           </article>
         ))}

@@ -19,7 +19,7 @@ export const navLinks = [
 ];
 
 const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-4 focus-visible:ring-offset-cream rounded-sm";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-azure focus-visible:ring-offset-4 focus-visible:ring-offset-cream rounded-sm";
 
 /**
  * Research disclosure. Surfaces each programme's location and clinical stage —
@@ -53,7 +53,7 @@ function ResearchPanel({ onNavigate }: { onNavigate: () => void }) {
           <span
             className={cn(
               "shrink-0 text-[11px] font-bold uppercase tracking-[0.18px]",
-              project.statusTone === "clay" ? "text-clay" : "text-sage",
+              project.statusTone === "clay" ? "text-navy" : "text-azure",
             )}
           >
             {project.status}
@@ -69,7 +69,7 @@ function ResearchPanel({ onNavigate }: { onNavigate: () => void }) {
           href="/projects"
           onClick={onNavigate}
           className={cn(
-            "group flex shrink-0 items-center gap-1 text-[13px] font-semibold text-sage",
+            "group flex shrink-0 items-center gap-1 text-[13px] font-semibold text-azure",
             focusRing,
           )}
         >
@@ -154,7 +154,7 @@ export default function SiteHeader() {
         )}
       >
         <Link href="/" aria-label="CodeTherapy home" className={focusRing}>
-          <BrandMark size={scrolled ? 32 : 36} />
+          <BrandMark size={scrolled ? 26 : 30} />
         </Link>
 
         <nav className="hidden items-center gap-10 md:flex">
@@ -175,8 +175,8 @@ export default function SiteHeader() {
                   className={cn(
                     "relative block py-1 text-[15px] transition-colors",
                     active
-                      ? "font-bold text-sage"
-                      : "font-medium text-ink-soft hover:text-sage",
+                      ? "font-bold text-azure"
+                      : "font-medium text-ink-soft hover:text-azure",
                     focusRing,
                   )}
                 >
@@ -184,7 +184,7 @@ export default function SiteHeader() {
                   {active && (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute -bottom-0.5 left-0 h-0.5 w-full rounded-full bg-sage"
+                      className="absolute -bottom-0.5 left-0 h-0.5 w-full rounded-full bg-azure"
                       transition={
                         reduceMotion
                           ? { duration: 0 }
@@ -200,7 +200,7 @@ export default function SiteHeader() {
 
         <Link
           href="/contact"
-          className={cn("btn-sage hidden md:inline-flex", focusRing)}
+          className={cn("btn-azure hidden md:inline-flex", focusRing)}
         >
           Get Involved
         </Link>
@@ -246,7 +246,7 @@ export default function SiteHeader() {
             className="fixed inset-0 z-50 flex flex-col bg-cream md:hidden"
           >
             <div className="shell flex h-[88px] shrink-0 items-center justify-between">
-              <BrandMark />
+              <BrandMark size={28} />
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}
@@ -266,7 +266,7 @@ export default function SiteHeader() {
                         href={link.href}
                         className={cn(
                           "py-2 font-serif text-2xl font-semibold",
-                          isActive(link.href) ? "text-sage" : "text-ink",
+                          isActive(link.href) ? "text-azure" : "text-ink",
                           focusRing,
                         )}
                       >
@@ -288,7 +288,7 @@ export default function SiteHeader() {
                       >
                         <span
                           className={cn(
-                            "block text-lg leading-none text-sage transition-transform duration-200",
+                            "block text-lg leading-none text-azure transition-transform duration-200",
                             mobileResearchOpen && "rotate-45",
                           )}
                         >
@@ -314,8 +314,8 @@ export default function SiteHeader() {
                                   className={cn(
                                     "text-[11px] font-bold uppercase",
                                     project.statusTone === "clay"
-                                      ? "text-clay"
-                                      : "text-sage",
+                                      ? "text-navy"
+                                      : "text-azure",
                                   )}
                                 >
                                   {project.status}
@@ -333,7 +333,7 @@ export default function SiteHeader() {
                     href={link.href}
                     className={cn(
                       "border-b border-line py-4 font-serif text-2xl font-semibold",
-                      isActive(link.href) ? "text-sage" : "text-ink",
+                      isActive(link.href) ? "text-azure" : "text-ink",
                       focusRing,
                     )}
                   >
@@ -344,7 +344,7 @@ export default function SiteHeader() {
 
               <Link
                 href="/contact"
-                className={cn("btn-sage mt-8 self-start", focusRing)}
+                className={cn("btn-azure mt-8 self-start", focusRing)}
               >
                 Get Involved
               </Link>

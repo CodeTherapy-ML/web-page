@@ -1,12 +1,14 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { sendLeadNotification } from "@/lib/email";
+import { sendContactEmails, sendNewsletterEmails } from "@/lib/email";
 
 /**
  * Contact + newsletter lead capture — validates, persists to the Lead table
- * (which feeds the admin dashboard's bell/leads) and emails via SMTP.
+ * (which feeds /admin/messages and the topbar bell) and sends two emails:
+ * a notification to the team inbox and a confirmation to the submitter.
  */
 
 const contactInput = z.object({
@@ -42,19 +44,19 @@ export async function submitContact(
     },
   });
 
-  const emailed = await sendLeadNotification({
-    source: "contact",
+  const delivery = await sendContactEmails({
     name: d.name,
     email: d.email,
-    details: [
-      `Organization: ${d.organization || "—"}`,
-      `Inquiry type: ${d.inquiry}`,
-      "",
-      d.message,
-    ].join("\n"),
+    organization: d.organization || null,
+    inquiry: d.inquiry,
+    message: d.message,
   });
 
-  return { ok: true, emailed };
+  // The new row drives the Messages screen and the topbar badge.
+  revalidatePath("/admin/messages");
+  revalidatePath("/admin");
+
+  return { ok: true, emailed: delivery.sender };
 }
 
 export async function submitNewsletter(
@@ -76,12 +78,10 @@ export async function submitNewsletter(
     },
   });
 
-  const emailed = await sendLeadNotification({
-    source: "newsletter",
-    name: email.split("@")[0],
-    email,
-    details: `New newsletter subscription from ${email}.`,
-  });
+  const delivery = await sendNewsletterEmails(email);
 
-  return { ok: true, emailed };
+  revalidatePath("/admin/messages");
+  revalidatePath("/admin");
+
+  return { ok: true, emailed: delivery.sender };
 }

@@ -158,10 +158,10 @@ export const settingsDefaults: Record<string, unknown> = {
   siteDescription:
     "Pioneering open-source AI diagnostics designed for and with frontline health workers in underserved communities across Africa and globally.",
   siteUrl: "https://codetherapy.ml",
-  primaryAccent: "#4A7C59",
-  secondaryAccent: "#C2703E",
-  standardLogo: "/v2/logo-mark.png",
-  darkModeLogo: "/v2/logo-mark.png",
+  primaryAccent: "#00719D",
+  secondaryAccent: "#0B3C5D",
+  standardLogo: "/brand/wordmark-light.png",
+  darkModeLogo: "/brand/wordmark-dark.png",
   socialLinks: {
     twitter: "https://twitter.com/codetherapy",
     linkedin: "https://linkedin.com/company/codetherapy-labs",

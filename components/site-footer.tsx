@@ -46,8 +46,8 @@ export default function SiteFooter() {
       <div className="shell flex flex-col gap-16 pb-12 pt-24">
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-8">
           <div className="flex w-full max-w-[405px] flex-col gap-6">
-            <BrandMark size={32} textClass="text-white text-[20px]" />
-            <p className="text-sm leading-[1.6] text-[#d1d6d2] opacity-80">
+            <BrandMark size={30} tone="dark" />
+            <p className="text-sm leading-[1.6] text-[#c3d2dd] opacity-80">
               Developing globally trusted, clinically sound artificial
               intelligence diagnostics with a specific dedication to health
               equity across Africa and remote regions.
@@ -65,7 +65,7 @@ export default function SiteFooter() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm text-[#d1d6d2] opacity-70 transition-opacity hover:opacity-100"
+                        className="text-sm text-[#c3d2dd] opacity-70 transition-opacity hover:opacity-100"
                       >
                         {link.label}
                       </Link>
@@ -77,16 +77,16 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-[#454d49] pt-8 text-[13px] text-[#888e8a] sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-4 border-t border-[#45586a] pt-8 text-[13px] text-[#8aa0b0] sm:flex-row sm:items-start sm:justify-between">
           <p>© 2026 CodeTherapy Research Group. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-[#d1d6d2]">
+            <Link href="/privacy" className="hover:text-[#c3d2dd]">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-[#d1d6d2]">
+            <Link href="/terms" className="hover:text-[#c3d2dd]">
               Terms of Use
             </Link>
-            <Link href="/license" className="hover:text-[#d1d6d2]">
+            <Link href="/license" className="hover:text-[#c3d2dd]">
               Open-Source License
             </Link>
           </div>

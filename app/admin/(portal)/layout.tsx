@@ -30,7 +30,7 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen bg-gray-100 font-admin">
-      <AdminSidebar version={version} />
+      <AdminSidebar version={version} newLeads={newLeads} />
       <div className="flex min-w-0 flex-1 flex-col">
         <AdminTopbar name={session.name} role={session.role} newLeads={newLeads} />
         <main className="flex-1">{children}</main>

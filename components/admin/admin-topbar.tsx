@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Bell, LogOut, Search } from "lucide-react";
 import { signOut } from "@/app/admin/actions";
 
@@ -34,14 +35,22 @@ export default function AdminTopbar({
       </label>
 
       <div className="flex items-center gap-5">
-        <span className="relative flex size-9 items-center justify-center rounded-[18px] bg-gray-100">
+        <Link
+          href="/admin/messages"
+          aria-label={
+            newLeads > 0
+              ? `${newLeads} unread message${newLeads === 1 ? "" : "s"}`
+              : "Messages"
+          }
+          className="relative flex size-9 items-center justify-center rounded-[18px] bg-gray-100 transition-colors hover:bg-gray-200"
+        >
           <Bell className="size-[18px] text-ink-soft" />
           {newLeads > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-lg bg-admin-clay text-[9px] font-bold text-white">
+            <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-lg bg-admin-navy text-[9px] font-bold text-white">
               {newLeads > 9 ? "9+" : newLeads}
             </span>
           )}
-        </span>
+        </Link>
 
         <span className="h-6 w-px bg-gray-200" aria-hidden />
 

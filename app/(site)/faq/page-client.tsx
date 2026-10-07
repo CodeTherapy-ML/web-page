@@ -76,8 +76,8 @@ export default function FaqPageClient({
               className={cn(
                 "rounded-[20px] border px-5 py-2.5 text-sm font-semibold transition-colors",
                 active
-                  ? "border-sage bg-sage text-white"
-                  : "border-line bg-white text-ink hover:border-sage hover:text-sage",
+                  ? "border-azure bg-azure text-white"
+                  : "border-line bg-white text-ink hover:border-azure hover:text-azure",
               )}
             >
               {chip}
@@ -117,7 +117,7 @@ export default function FaqPageClient({
                     <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-cream">
                       <Plus
                         className={cn(
-                          "size-4 text-sage transition-transform duration-200",
+                          "size-4 text-azure transition-transform duration-200",
                           isOpen && "rotate-45",
                         )}
                       />
@@ -163,7 +163,7 @@ export default function FaqPageClient({
 
       {/* ----------------------------------------------------------- cta */}
       <section className="shell pb-32 pt-20">
-        <div className="flex flex-col items-center gap-6 rounded-3xl bg-sage-soft p-8 text-center md:p-16">
+        <div className="flex flex-col items-center gap-6 rounded-3xl bg-azure-soft p-8 text-center md:p-16">
           <h2 className="font-serif text-[28px] font-semibold text-ink md:text-[36px]">
             Still Have Questions?
           </h2>

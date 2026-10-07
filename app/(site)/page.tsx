@@ -89,7 +89,7 @@ export default async function HomePage() {
               className="enter flex flex-wrap gap-4"
               style={{ animationDelay: "180ms" }}
             >
-              <Link href="/projects" className="btn-sage">
+              <Link href="/projects" className="btn-azure">
                 Explore Our Research
               </Link>
               <Link href="/about" className="btn-outline-ink">
@@ -155,7 +155,7 @@ export default async function HomePage() {
           </p>
           <Link
             href="/about"
-            className="group flex items-center gap-2 text-[15px] font-semibold text-sage"
+            className="group flex items-center gap-2 text-[15px] font-semibold text-azure"
           >
             Learn Our Story
             <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-1" />
@@ -176,10 +176,10 @@ export default async function HomePage() {
             <Reveal key={n} delay={i * 80}>
               <div className="flex h-full flex-col gap-5 rounded-2xl border border-line bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <span className="flex size-11 items-center justify-center rounded-[22px] bg-sage-soft">
-                    <Icon className="size-5 text-sage" />
+                  <span className="flex size-11 items-center justify-center rounded-[22px] bg-azure-soft">
+                    <Icon className="size-5 text-azure" />
                   </span>
-                  <span className="font-serif text-2xl font-bold text-clay opacity-80">
+                  <span className="font-serif text-2xl font-bold text-navy opacity-80">
                     {n}
                   </span>
                 </div>
@@ -220,7 +220,7 @@ export default async function HomePage() {
       {/* -------------------------------------------------- testimonial */}
       <section className="shell flex flex-col items-center gap-8 py-24 text-center lg:py-32">
         <p
-          className="font-serif text-[72px] font-bold leading-[0.5] text-clay"
+          className="font-serif text-[72px] font-bold leading-[0.5] text-navy"
           aria-hidden
         >
           &ldquo;
@@ -239,7 +239,7 @@ export default async function HomePage() {
       </section>
 
       {/* ------------------------------------------------------- values */}
-      <section className="bg-sage-soft">
+      <section className="bg-azure-soft">
         <div className="shell flex flex-col gap-16 py-24 lg:py-32">
           <header className="flex flex-col items-center gap-4 text-center">
             <SectionLabel>What Drives Us</SectionLabel>
@@ -251,8 +251,8 @@ export default async function HomePage() {
             {values.map(({ icon: Icon, title, body }, i) => (
               <Reveal key={title} delay={i * 80}>
                 <div className="flex h-full flex-col gap-4 rounded-2xl bg-white p-6 drop-shadow-[0px_12px_12px_rgba(77,109,83,0.03)]">
-                  <span className="flex size-10 items-center justify-center rounded-[20px] bg-clay-soft">
-                    <Icon className="size-[18px] text-clay" />
+                  <span className="flex size-10 items-center justify-center rounded-[20px] bg-navy-soft">
+                    <Icon className="size-[18px] text-navy" />
                   </span>
                   <h3 className="font-serif text-[22px] font-semibold text-ink">
                     {title}
@@ -281,11 +281,11 @@ export default async function HomePage() {
                 href="/blog"
                 className="group flex flex-col gap-4 border-b border-line py-8 sm:flex-row sm:items-start sm:gap-10"
               >
-                <p className="w-[150px] shrink-0 text-sm font-bold text-clay">
+                <p className="w-[150px] shrink-0 text-sm font-bold text-navy">
                   {item.date}
                 </p>
                 <div className="flex flex-1 flex-col gap-2">
-                  <h3 className="font-serif text-2xl font-semibold text-ink group-hover:text-sage">
+                  <h3 className="font-serif text-2xl font-semibold text-ink group-hover:text-azure">
                     {item.title}
                   </h3>
                   <p className="text-[15px] leading-[1.5] text-ink-soft">
@@ -303,7 +303,7 @@ export default async function HomePage() {
 
       {/* ---------------------------------------------------------- cta */}
       <section className="shell py-24 lg:py-32">
-        <div className="flex flex-col items-center gap-8 rounded-3xl bg-sage-soft px-8 py-20 text-center md:px-16">
+        <div className="flex flex-col items-center gap-8 rounded-3xl bg-azure-soft px-8 py-20 text-center md:px-16">
           <SectionLabel>Collaboration</SectionLabel>
           <h2 className="max-w-[843px] font-serif text-[34px] font-semibold leading-[1.15] text-ink md:text-[48px]">
             Join us in transforming healthcare.

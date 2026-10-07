@@ -6,6 +6,7 @@ import {
   Edit3,
   ExternalLink,
   FolderPlus,
+  Mail,
   Plus,
   Upload,
 } from "lucide-react";
@@ -82,9 +83,9 @@ export default async function AdminDashboardPage() {
   ];
 
   const statusPill: Record<string, string> = {
-    published: "bg-[#ebf2ec] text-admin-sage",
-    underReview: "bg-[#eff6ff] text-[#2563eb]",
-    draft: "bg-[#fdf1ea] text-admin-clay",
+    published: "bg-[#e2f4fd] text-admin-azure",
+    underReview: "bg-[#cbe9fa] text-admin-azure",
+    draft: "bg-[#e7ecf1] text-admin-navy",
   };
   const statusLabel: Record<string, string> = {
     published: "Published",
@@ -117,7 +118,7 @@ export default async function AdminDashboardPage() {
               <span
                 className={cn(
                   "flex items-center gap-1 rounded px-1.5 py-1 text-[11px] font-semibold",
-                  kpi.tone === "sage" ? "bg-[#ebf2ec] text-admin-sage" : "bg-[#fdf1ea] text-admin-clay",
+                  kpi.tone === "sage" ? "bg-[#e2f4fd] text-admin-azure" : "bg-[#e7ecf1] text-admin-navy",
                 )}
               >
                 {kpi.delta.startsWith("-") ? (
@@ -140,7 +141,7 @@ export default async function AdminDashboardPage() {
             <h2 className="font-bold text-ink">Recent Articles</h2>
             <Link
               href="/admin/articles"
-              className="px-2.5 py-1.5 text-[13px] font-semibold text-admin-sage hover:underline"
+              className="px-2.5 py-1.5 text-[13px] font-semibold text-admin-azure hover:underline"
             >
               View all articles
             </Link>
@@ -190,29 +191,41 @@ export default async function AdminDashboardPage() {
             <div className="flex flex-col gap-2">
               <Link
                 href="/admin/articles/new"
-                className="flex items-center gap-2.5 rounded-md bg-admin-sage px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+                className="flex items-center gap-2.5 rounded-md bg-admin-azure px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
               >
                 <Plus className="size-4" />
                 <span className="flex-1">New Article</span>
               </Link>
               <Link
                 href="/admin/projects/new"
-                className="flex items-center gap-2.5 rounded-md border border-gray-200 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-admin-sage hover:text-admin-sage"
+                className="flex items-center gap-2.5 rounded-md border border-gray-200 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-admin-azure hover:text-admin-azure"
               >
                 <FolderPlus className="size-4" />
                 <span className="flex-1">New Project</span>
               </Link>
               <Link
                 href="/admin/media"
-                className="flex items-center gap-2.5 rounded-md border border-gray-200 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-admin-sage hover:text-admin-sage"
+                className="flex items-center gap-2.5 rounded-md border border-gray-200 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-admin-azure hover:text-admin-azure"
               >
                 <Upload className="size-4" />
                 <span className="flex-1">Upload Media</span>
               </Link>
               <Link
+                href="/admin/messages"
+                className="flex items-center gap-2.5 rounded-md border border-gray-200 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-admin-azure hover:text-admin-azure"
+              >
+                <Mail className="size-4" />
+                <span className="flex-1">Messages</span>
+                {newLeads > 0 && (
+                  <span className="rounded-full bg-admin-azure px-1.5 py-0.5 text-[10px] font-bold text-white">
+                    {newLeads}
+                  </span>
+                )}
+              </Link>
+              <Link
                 href="/"
                 target="_blank"
-                className="flex items-center gap-2.5 rounded-md border border-gray-200 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-admin-sage hover:text-admin-sage"
+                className="flex items-center gap-2.5 rounded-md border border-gray-200 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-admin-azure hover:text-admin-azure"
               >
                 <ExternalLink className="size-4" />
                 <span className="flex-1">View Public Site</span>
@@ -242,7 +255,7 @@ export default async function AdminDashboardPage() {
                       "flex size-8 items-center justify-center rounded-full",
                       day && "text-ink",
                       !day && "text-transparent",
-                      isToday && "bg-admin-sage font-bold text-white",
+                      isToday && "bg-admin-azure font-bold text-white",
                     )}
                   >
                     {day ? day.getDate() : 0}

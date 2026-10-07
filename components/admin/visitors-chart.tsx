@@ -12,7 +12,7 @@ import {
 
 type Month = { month: string; visitors: number; pageviews: number };
 
-/** Monthly visitors trend from MonthlyStat — sage bars + clay bars. */
+/** Monthly visitors trend from MonthlyStat — the brand cyan at two strengths. */
 export default function VisitorsChart({ data }: { data: Month[] }) {
   const formatted = data.map((d) => ({
     ...d,
@@ -37,7 +37,7 @@ export default function VisitorsChart({ data }: { data: Month[] }) {
             allowDecimals={false}
           />
           <Tooltip
-            cursor={{ fill: "rgba(74,124,89,0.06)" }}
+            cursor={{ fill: "rgba(0,174,239,0.07)" }}
             contentStyle={{
               borderRadius: 8,
               border: "1px solid #e5e7eb",
@@ -47,14 +47,14 @@ export default function VisitorsChart({ data }: { data: Month[] }) {
           <Bar
             dataKey="visitors"
             name="Visitors"
-            fill="#4a7c59"
+            fill="#00719d"
             radius={[3, 3, 0, 0]}
             maxBarSize={22}
           />
           <Bar
             dataKey="pageviews"
             name="Pageviews"
-            fill="#c2703e"
+            fill="#00aeef"
             radius={[3, 3, 0, 0]}
             maxBarSize={22}
           />

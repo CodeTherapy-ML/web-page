@@ -63,8 +63,13 @@ model Lead {
   email        String
   organization String?
   message      String
-  status       String   @default("new") // "new" | "reviewed"
-  createdAt    DateTime @default(now())
+  status       String   @default("new") // "new" | "reviewed" | "replied" | "archived"
+  // Inbox features: the reply composer logs every sent reply and stamps the
+  // latest one; notes are the team's internal scratchpad on the enquiry.
+  repliedAt DateTime?
+  replyLog  Json? // [{ at: ISO, subject, body }]
+  notes     String?
+  createdAt DateTime @default(now())
 }
 
 /// Research programs — mirrors the Project type in lib/projects.ts.

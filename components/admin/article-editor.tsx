@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import Image from "next/image";
 import Link from "next/link";
 import type { JsonValue } from "@prisma/client/runtime/library";
-import { ImagePlus } from "lucide-react";
 import { savePost } from "@/app/admin/(portal)/articles/actions";
+import ImageUploadField from "@/components/admin/image-upload-field";
 import RichEditor from "@/components/admin/rich-editor";
 import { cn } from "@/lib/utils";
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none transition-colors focus:border-admin-sage";
+  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none transition-colors focus:border-admin-azure";
 const labelClass = "text-[13px] font-semibold text-gray-600";
 
 function SaveButtons() {
@@ -23,7 +22,7 @@ function SaveButtons() {
         name="intent"
         value="draft"
         disabled={pending}
-        className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-semibold text-[#1e293b] transition-colors hover:border-admin-sage hover:text-admin-sage disabled:opacity-60"
+        className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-semibold text-[#1e293b] transition-colors hover:border-admin-azure hover:text-admin-azure disabled:opacity-60"
       >
         Save Draft
       </button>
@@ -32,7 +31,7 @@ function SaveButtons() {
         name="intent"
         value="publish"
         disabled={pending}
-        className="rounded-lg bg-admin-sage px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+        className="rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
       >
         Publish Article
       </button>
@@ -73,7 +72,7 @@ export default function ArticleEditor({
         <nav className="flex items-center gap-1.5 text-sm">
           <Link
             href="/admin/articles"
-            className="font-semibold text-admin-sage hover:underline"
+            className="font-semibold text-admin-azure hover:underline"
           >
             Back to Articles
           </Link>
@@ -102,7 +101,7 @@ export default function ArticleEditor({
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-lg font-semibold text-ink outline-none focus:border-admin-sage"
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-lg font-semibold text-ink outline-none focus:border-admin-azure"
               />
             </label>
             <label className="mt-4 flex flex-col gap-1.5">
@@ -113,7 +112,7 @@ export default function ArticleEditor({
                 rows={3}
                 value={excerpt}
                 onChange={(e) => setExcerpt(e.target.value)}
-                className="w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-admin-sage"
+                className="w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-admin-azure"
               />
             </label>
           </section>
@@ -186,8 +185,8 @@ export default function ArticleEditor({
                   defaultValue={post?.categoryTone ?? "sage"}
                   className={inputClass}
                 >
-                  <option value="sage">Sage</option>
-                  <option value="clay">Clay</option>
+                  <option value="sage">Azure</option>
+                  <option value="clay">Navy</option>
                 </select>
               </label>
             </div>
@@ -195,31 +194,12 @@ export default function ArticleEditor({
 
           <section className="rounded-xl border border-gray-200 bg-white p-5">
             <h2 className="mb-4 font-bold text-ink">Featured Image</h2>
-            <div className="relative mb-3 h-36 w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-              {post?.image && (
-                <Image
-                  src={post.image}
-                  alt=""
-                  fill
-                  sizes="320px"
-                  className="object-cover"
-                />
-              )}
-            </div>
-            <div className="flex gap-2">
-              <label className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-sage hover:text-admin-sage">
-                <ImagePlus className="size-4" />
-                Change Image
-                <input type="file" accept="image/*" className="hidden" />
-              </label>
-              <input
-                name="image"
-                required
-                defaultValue={post?.image}
-                placeholder="/v2/post-1.png"
-                className={inputClass}
-              />
-            </div>
+            <ImageUploadField
+              name="image"
+              required
+              defaultValue={post?.image}
+              hint="Recommended size: 1200×630px."
+            />
           </section>
 
           <section className="rounded-xl border border-gray-200 bg-white p-5">
@@ -236,15 +216,15 @@ export default function ArticleEditor({
                     required
                     value={slug}
                     onChange={(e) => setSlug(e.target.value)}
-                    className="h-10 w-full rounded-r-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-sage"
+                    className="h-10 w-full rounded-r-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-azure"
                   />
                 </div>
               </label>
               <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                <p className="truncate text-sm font-semibold text-[#2563eb]">
+                <p className="truncate text-sm font-semibold text-admin-azure">
                   {title || "Article title"} - CodeTherapy
                 </p>
-                <p className="truncate text-xs text-[#15803d]">
+                <p className="truncate text-xs text-ink-soft">
                   https://codetherapy.ml/blog/{slug || "…"}
                 </p>
                 <p className="line-clamp-2 text-xs text-gray-500">

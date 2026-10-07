@@ -91,21 +91,21 @@ const ColoredTableCell = TableCell.extend({
 });
 
 const TEXT_COLORS = [
-  "#1e2229",
-  "#454d49",
-  "#4a7c59",
-  "#c2703e",
-  "#2563eb",
+  "#0d1117", // ink
+  "#45586a", // ink-soft
+  "#00719d", // azure
+  "#00aeef", // azure-bright (the logo cyan)
+  "#0b3c5d", // navy
   "#dc2626",
   "#f59e0b",
   "#6b7280",
 ];
 const CELL_COLORS = [
   "#ffffff",
-  "#eaf0eb",
-  "#f7ede9",
-  "#eff6ff",
-  "#fdf1ea",
+  "#e2f4fd", // azure-soft
+  "#cbe9fa", // azure tint, one step up
+  "#e7ecf1", // navy-soft
+  "#f4f8fb", // cream
   "#fef3c7",
   "#fee2e2",
   "#f3f4f6",
@@ -164,7 +164,7 @@ export default function RichEditor({
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm max-w-none min-h-[320px] w-full rounded-b-lg border border-t-0 border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus-visible:border-admin-sage [&_img]:rounded-lg [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded-lg [&_video]:w-full [&_video]:rounded-lg [&_.tableWrapper]:overflow-x-auto [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-gray-200 [&_th]:bg-gray-50 [&_th]:px-3 [&_th]:py-1.5 [&_td]:border [&_td]:border-gray-200 [&_td]:px-3 [&_td]:py-1.5",
+          "prose prose-sm max-w-none min-h-[320px] w-full rounded-b-lg border border-t-0 border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus-visible:border-admin-azure [&_img]:rounded-lg [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded-lg [&_video]:w-full [&_video]:rounded-lg [&_.tableWrapper]:overflow-x-auto [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-gray-200 [&_th]:bg-gray-50 [&_th]:px-3 [&_th]:py-1.5 [&_td]:border [&_td]:border-gray-200 [&_td]:px-3 [&_td]:py-1.5",
       },
     },
     onUpdate: ({ editor }) => setHtml(editor.getHTML()),
@@ -240,7 +240,7 @@ export default function RichEditor({
           title="Paragraph"
           className={cn(
             "rounded px-2 py-1 text-xs font-semibold text-gray-600 hover:bg-white",
-            editor?.isActive("paragraph") && "bg-white text-admin-sage shadow-sm",
+            editor?.isActive("paragraph") && "bg-white text-admin-azure shadow-sm",
           )}
         >
           ¶
@@ -254,7 +254,7 @@ export default function RichEditor({
             className={cn(
               "rounded px-2 py-1 text-xs font-bold text-gray-600 hover:bg-white",
               editor?.isActive("heading", { level }) &&
-                "bg-white text-admin-sage shadow-sm",
+                "bg-white text-admin-azure shadow-sm",
             )}
           >
             H{level}
@@ -265,7 +265,7 @@ export default function RichEditor({
           type="button"
           onClick={() => editor?.chain().focus().toggleBold().run()}
           aria-label="Bold"
-          className={cn(toolbarButton, editor?.isActive("bold") && "bg-white text-admin-sage shadow-sm")}
+          className={cn(toolbarButton, editor?.isActive("bold") && "bg-white text-admin-azure shadow-sm")}
         >
           <Bold className="size-3.5" />
         </button>
@@ -273,7 +273,7 @@ export default function RichEditor({
           type="button"
           onClick={() => editor?.chain().focus().toggleItalic().run()}
           aria-label="Italic"
-          className={cn(toolbarButton, editor?.isActive("italic") && "bg-white text-admin-sage shadow-sm")}
+          className={cn(toolbarButton, editor?.isActive("italic") && "bg-white text-admin-azure shadow-sm")}
         >
           <Italic className="size-3.5" />
         </button>
@@ -281,7 +281,7 @@ export default function RichEditor({
           type="button"
           onClick={() => editor?.chain().focus().toggleBulletList().run()}
           aria-label="Bullet list"
-          className={cn(toolbarButton, editor?.isActive("bulletList") && "bg-white text-admin-sage shadow-sm")}
+          className={cn(toolbarButton, editor?.isActive("bulletList") && "bg-white text-admin-azure shadow-sm")}
         >
           <List className="size-3.5" />
         </button>
@@ -289,7 +289,7 @@ export default function RichEditor({
           type="button"
           onClick={() => editor?.chain().focus().toggleBlockquote().run()}
           aria-label="Blockquote"
-          className={cn(toolbarButton, editor?.isActive("blockquote") && "bg-white text-admin-sage shadow-sm")}
+          className={cn(toolbarButton, editor?.isActive("blockquote") && "bg-white text-admin-azure shadow-sm")}
         >
           <Quote className="size-3.5" />
         </button>
@@ -302,7 +302,7 @@ export default function RichEditor({
             editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
           }
           title="Insert table"
-          className={cn(toolbarButton, inTable && "bg-white text-admin-sage shadow-sm")}
+          className={cn(toolbarButton, inTable && "bg-white text-admin-azure shadow-sm")}
         >
           <TableIcon className="size-3.5" />
         </button>
@@ -344,7 +344,7 @@ export default function RichEditor({
           aria-label="Text colour"
           className={cn(
             toolbarButton,
-            (colorPanel === "text" || activeTextColor) && "bg-white text-admin-sage shadow-sm",
+            (colorPanel === "text" || activeTextColor) && "bg-white text-admin-azure shadow-sm",
           )}
         >
           <Palette className="size-3.5" />
@@ -356,7 +356,7 @@ export default function RichEditor({
           aria-label="Cell background"
           className={cn(
             toolbarButton,
-            (colorPanel === "cell" || activeCellColor) && "bg-white text-admin-sage shadow-sm",
+            (colorPanel === "cell" || activeCellColor) && "bg-white text-admin-azure shadow-sm",
           )}
         >
           <PaintBucket className="size-3.5" />
@@ -372,7 +372,7 @@ export default function RichEditor({
           }}
           aria-label="Embed image"
           title="Embed image (URL or upload)"
-          className={cn(toolbarButton, embedMode === "image" && "bg-white text-admin-sage shadow-sm")}
+          className={cn(toolbarButton, embedMode === "image" && "bg-white text-admin-azure shadow-sm")}
         >
           <ImagePlus className="size-3.5" />
         </button>
@@ -384,7 +384,7 @@ export default function RichEditor({
           }}
           aria-label="Embed video"
           title="Embed video (YouTube/Vimeo URL or upload)"
-          className={cn(toolbarButton, embedMode === "video" && "bg-white text-admin-sage shadow-sm")}
+          className={cn(toolbarButton, embedMode === "video" && "bg-white text-admin-azure shadow-sm")}
         >
           <Film className="size-3.5" />
         </button>
@@ -442,7 +442,7 @@ export default function RichEditor({
                   aria-label={`${colorPanel === "text" ? "Text" : "Cell"} colour ${color}`}
                   className={cn(
                     "size-6 rounded border border-gray-200",
-                    active && "ring-2 ring-admin-sage ring-offset-1",
+                    active && "ring-2 ring-admin-azure ring-offset-1",
                   )}
                   style={{ backgroundColor: color }}
                 />
@@ -458,7 +458,7 @@ export default function RichEditor({
                 editor?.chain().focus().setCellAttribute("background", "transparent").run();
               }
             }}
-            className="text-left text-xs font-semibold text-gray-500 hover:text-admin-sage"
+            className="text-left text-xs font-semibold text-gray-500 hover:text-admin-azure"
           >
             Reset {colorPanel === "text" ? "text" : "cell"} colour
           </button>
@@ -488,12 +488,12 @@ export default function RichEditor({
                 ? "Paste image URL — https://…/image.png"
                 : "Paste YouTube/Vimeo URL — or upload a video file"
             }
-            className="h-9 min-w-0 flex-1 rounded-lg border border-gray-200 bg-white px-2.5 text-sm text-ink outline-none focus:border-admin-sage"
+            className="h-9 min-w-0 flex-1 rounded-lg border border-gray-200 bg-white px-2.5 text-sm text-ink outline-none focus:border-admin-azure"
           />
           <button
             type="button"
             onClick={insertEmbed}
-            className="shrink-0 rounded-lg bg-admin-sage px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+            className="shrink-0 rounded-lg bg-admin-azure px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-azure-deep"
           >
             Insert
           </button>
@@ -502,7 +502,7 @@ export default function RichEditor({
             type="button"
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-admin-sage hover:text-admin-sage disabled:opacity-60"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-admin-azure hover:text-admin-azure disabled:opacity-60"
           >
             <Upload className="size-3.5" />
             {uploading ? "Uploading…" : "Upload"}

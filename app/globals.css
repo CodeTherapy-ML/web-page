@@ -3,38 +3,43 @@
 @tailwind utilities;
 
 /*
-  CodeTherapy v2 design tokens — mirrors the `v2-*` frames in Figma
-  (file o6av4fysp0hcWFC77kQVOA, page "Driver Bigbabs Baagos").
+  CodeTherapy design tokens — derived from the logo (public/logo.jpeg):
+  a black field, "Code" in white script, "Therapy" in #00AEEF.
 
-  cream #faf8f2 · line #eae6db · ink #1e2229 · ink-soft #454d49
-  sage #4d6d53 · sage-soft #eaf0eb · clay #c4644f · clay-soft #f7ede9
+  cream #f4f8fb · line #dbe6ef · ink #0d1117 · ink-deep #05080c · ink-soft #45586a
+  azure #00719d · azure-bright #00aeef · azure-soft #e2f4fd
+  navy #0b3c5d · navy-soft #e7ecf1
+
+  The HSL triples below are the same values in the shadcn variable format.
 */
 :root {
-  --background: 45 44% 96%;
-  --foreground: 218 15% 14%;
+  --background: 205 47% 97%;
+  --foreground: 216 28% 7%;
   --card: 0 0% 100%;
-  --card-foreground: 218 15% 14%;
+  --card-foreground: 216 28% 7%;
   --popover: 0 0% 100%;
-  --popover-foreground: 218 15% 14%;
-  --primary: 131 17% 36%;
+  --popover-foreground: 216 28% 7%;
+  --primary: 197 100% 31%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 128 15% 93%;
-  --secondary-foreground: 131 17% 36%;
-  --muted: 44 26% 89%;
-  --muted-foreground: 150 5% 29%;
-  --accent: 11 50% 54%;
+  --secondary: 200 87% 94%;
+  --secondary-foreground: 197 100% 31%;
+  --muted: 207 38% 90%;
+  --muted-foreground: 209 21% 34%;
+  --accent: 204 79% 20%;
   --accent-foreground: 0 0% 100%;
-  --destructive: 11 50% 45%;
+  --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
-  --border: 44 26% 89%;
-  --input: 44 26% 89%;
-  --ring: 131 17% 36%;
+  --border: 207 38% 90%;
+  --input: 207 38% 90%;
+  --ring: 197 100% 31%;
   --radius: 0.75rem;
+  /* The logo cyan at full strength — for anything drawn outside Tailwind. */
+  --brand: #00aeef;
 }
 
 body {
-  background-color: #faf8f2;
-  color: #1e2229;
+  background-color: #f4f8fb;
+  color: #0d1117;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -49,8 +54,8 @@ body {
   .btn-v2 {
     @apply inline-flex items-center justify-center gap-2 rounded-[30px] border px-7 py-[14px] text-sm font-semibold transition-colors;
   }
-  .btn-sage {
-    @apply btn-v2 border-sage bg-sage text-white hover:bg-[#3f5a44] hover:border-[#3f5a44];
+  .btn-azure {
+    @apply btn-v2 border-azure bg-azure text-white hover:border-azure-deep hover:bg-azure-deep;
   }
   .btn-ink {
     @apply btn-v2 border-ink bg-ink text-white hover:bg-black;
@@ -120,7 +125,7 @@ body {
     transform 500ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
 }
 
-/* The 40px clay rule under each stat draws in just after its card lands. */
+/* The 40px accent rule under each stat draws in just after its card lands. */
 .js-reveal .reveal .stat-rule {
   transform: scaleX(0);
   transform-origin: left;

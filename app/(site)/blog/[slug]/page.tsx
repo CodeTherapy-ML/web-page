@@ -40,7 +40,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <article className="shell flex flex-col gap-12 pb-24 pt-14">
         <Link
           href="/blog"
-          className="self-start text-sm font-semibold text-sage hover:underline"
+          className="self-start text-sm font-semibold text-azure hover:underline"
         >
           ← Back to News
         </Link>
@@ -50,8 +50,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             className={cn(
               "self-start rounded-md py-1.5 pl-3.5 pr-2.5 text-xs font-bold uppercase",
               post.categoryTone === "clay"
-                ? "bg-clay-soft text-clay"
-                : "bg-sage-soft text-sage",
+                ? "bg-navy-soft text-navy"
+                : "bg-azure-soft text-azure",
             )}
           >
             {post.category}
@@ -82,7 +82,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <p className="text-[19px] leading-[1.7] text-ink">{post.excerpt}</p>
           {body.html ? (
             <div
-              className="flex flex-col gap-4 text-[17px] leading-[1.75] text-ink-soft [&_h1]:font-serif [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-ink [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-ink [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-ink [&_ul]:list-disc [&_ul]:pl-6 [&_blockquote]:border-l-2 [&_blockquote]:border-sage [&_blockquote]:pl-4 [&_blockquote]:italic [&_img]:max-w-full [&_img]:rounded-xl [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded-xl [&_video]:w-full [&_video]:rounded-xl [&_table]:w-full [&_table]:border-collapse [&_table]:my-2 [&_th]:border [&_th]:border-line [&_th]:bg-sage-soft [&_th]:px-3 [&_th]:py-1.5 [&_th]:text-left [&_td]:border [&_td]:border-line [&_td]:px-3 [&_td]:py-1.5"
+              className="flex flex-col gap-4 text-[17px] leading-[1.75] text-ink-soft [&_h1]:font-serif [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-ink [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-ink [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-ink [&_ul]:list-disc [&_ul]:pl-6 [&_blockquote]:border-l-2 [&_blockquote]:border-azure [&_blockquote]:pl-4 [&_blockquote]:italic [&_img]:max-w-full [&_img]:rounded-xl [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded-xl [&_video]:w-full [&_video]:rounded-xl [&_table]:w-full [&_table]:border-collapse [&_table]:my-2 [&_th]:border [&_th]:border-line [&_th]:bg-azure-soft [&_th]:px-3 [&_th]:py-1.5 [&_th]:text-left [&_td]:border [&_td]:border-line [&_td]:px-3 [&_td]:py-1.5"
               dangerouslySetInnerHTML={{ __html: body.html }}
             />
           ) : (
@@ -120,7 +120,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 <span className="text-[13px] text-ink-soft opacity-60">
                   {item.date}
                 </span>
-                <h3 className="font-serif text-xl font-semibold text-ink group-hover:text-sage">
+                <h3 className="font-serif text-xl font-semibold text-ink group-hover:text-azure">
                   {item.title}
                 </h3>
               </Link>
@@ -128,7 +128,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         </section>
 
-        <section className="flex flex-col items-center gap-8 rounded-3xl bg-sage-soft px-8 py-20 text-center md:px-16">
+        <section className="flex flex-col items-center gap-8 rounded-3xl bg-azure-soft px-8 py-20 text-center md:px-16">
           <SectionLabel>Collaboration</SectionLabel>
           <h2 className="max-w-[843px] font-serif text-[34px] font-semibold leading-[1.15] text-ink md:text-[48px]">
             Join us in transforming healthcare.

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Edit3, Trash2 } from "lucide-react";
 import { bulkDelete, bulkSetStatus } from "@/app/admin/(portal)/articles/actions";
 import { cn } from "@/lib/utils";
+import ConfirmDialog from "@/components/admin/confirm-dialog";
 
 type Row = {
   id: string;
@@ -18,9 +19,9 @@ type Row = {
 };
 
 const statusPill: Record<string, string> = {
-  published: "bg-[#ebf2ec] text-admin-sage",
-  underReview: "bg-[#eff6ff] text-[#2563eb]",
-  draft: "bg-[#fdf1ea] text-admin-clay",
+  published: "bg-[#e2f4fd] text-admin-azure",
+  underReview: "bg-[#cbe9fa] text-admin-azure",
+  draft: "bg-[#e7ecf1] text-admin-navy",
 };
 const statusLabel: Record<string, string> = {
   published: "Published",
@@ -31,6 +32,8 @@ const statusLabel: Record<string, string> = {
 export default function ArticlesTable({ posts }: { posts: Row[] }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState("published");
+  const [confirmBulk, setConfirmBulk] = useState(false);
+  const [bulkPending, setBulkPending] = useState(false);
 
   const toggle = (id: string) =>
     setSelected((prev) => {
@@ -45,8 +48,8 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
   return (
     <div className="flex flex-col gap-3">
       {selected.size > 0 && (
-        <div className="flex items-center justify-between rounded-lg border border-admin-sage/30 bg-[#ebf2ec] px-4 py-2.5">
-          <p className="text-sm font-semibold text-admin-sage">
+        <div className="flex items-center justify-between rounded-lg border border-admin-azure/30 bg-[#e2f4fd] px-4 py-2.5">
+          <p className="text-sm font-semibold text-admin-azure">
             {selected.size} article{selected.size === 1 ? "" : "s"} selected
           </p>
           <form className="flex items-center gap-3">
@@ -60,7 +63,7 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               aria-label="Change status"
-              className="h-9 rounded-lg border border-gray-200 bg-white px-2 text-sm text-ink outline-none focus:border-admin-sage"
+              className="h-9 rounded-lg border border-gray-200 bg-white px-2 text-sm text-ink outline-none focus:border-admin-azure"
             >
               <option value="published">Published</option>
               <option value="underReview">Under Review</option>
@@ -68,12 +71,13 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
             </select>
             <button
               formAction={bulkSetStatus}
-              className="rounded-lg border border-admin-sage px-3 py-1.5 text-xs font-semibold text-admin-sage transition-colors hover:bg-admin-sage hover:text-white"
+              className="rounded-lg border border-admin-azure px-3 py-1.5 text-xs font-semibold text-admin-azure transition-colors hover:bg-admin-azure hover:text-white"
             >
               Change Status
             </button>
             <button
-              formAction={bulkDelete}
+              type="button"
+              onClick={() => setConfirmBulk(true)}
               className="flex items-center gap-1 rounded-lg border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
             >
               <Trash2 className="size-3.5" />
@@ -82,6 +86,26 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
           </form>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmBulk}
+        title={`Delete ${selected.size} article${selected.size === 1 ? "" : "s"}?`}
+        description="The articles are removed from the blog and search engines will 404. This cannot be undone."
+        pending={bulkPending}
+        onCancel={() => setConfirmBulk(false)}
+        onConfirm={async () => {
+          setBulkPending(true);
+          const fd = new FormData();
+          fd.set("ids", JSON.stringify(Array.from(selected)));
+          try {
+            await bulkDelete(fd);
+            setSelected(new Set());
+          } finally {
+            setBulkPending(false);
+            setConfirmBulk(false);
+          }
+        }}
+      />
 
       <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
         <table className="w-full min-w-[760px] text-left text-sm">
@@ -95,7 +119,7 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
                     setSelected(allSelected ? new Set() : new Set(posts.map((p) => p.id)))
                   }
                   aria-label="Select all articles"
-                  className="size-4 rounded accent-admin-sage"
+                  className="size-4 rounded accent-admin-azure"
                 />
               </th>
               <th className="px-2 py-3">Thumb</th>
@@ -116,7 +140,7 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
                     checked={selected.has(post.id)}
                     onChange={() => toggle(post.id)}
                     aria-label={`Select ${post.title}`}
-                    className="size-4 rounded accent-admin-sage"
+                    className="size-4 rounded accent-admin-azure"
                   />
                 </td>
                 <td className="px-2 py-3">

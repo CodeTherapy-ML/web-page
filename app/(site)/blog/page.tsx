@@ -28,7 +28,7 @@ function CategoryPill({
     <span
       className={cn(
         "rounded px-[10px] py-1 font-bold uppercase",
-        tone === "clay" ? "bg-clay-soft text-clay" : "bg-sage-soft text-sage",
+        tone === "clay" ? "bg-navy-soft text-navy" : "bg-azure-soft text-azure",
         className,
       )}
     >
@@ -105,7 +105,7 @@ export default async function BlogPage() {
             <p className="text-[15px] leading-[1.6] text-ink-soft">
               {featuredPost.excerpt}
             </p>
-            <span className="flex items-center gap-2 text-[15px] font-semibold text-sage">
+            <span className="flex items-center gap-2 text-[15px] font-semibold text-azure">
               Read full article
               <ArrowRight className="size-[14px] transition-transform group-hover:translate-x-1" />
             </span>
@@ -146,7 +146,7 @@ export default async function BlogPage() {
               <p className="text-sm leading-[1.5] text-ink-soft">
                 {post.excerpt}
               </p>
-              <span className="mt-auto flex items-center gap-1 text-sm font-semibold text-sage">
+              <span className="mt-auto flex items-center gap-1 text-sm font-semibold text-azure">
                 Read more
                 <ArrowRight className="size-[14px] transition-transform group-hover:translate-x-1" />
               </span>
@@ -156,7 +156,7 @@ export default async function BlogPage() {
       </section>
 
       {/* --------------------------------------------------- newsletter */}
-      <section className="bg-sage-soft">
+      <section className="bg-azure-soft">
         <div className="shell pb-32 pt-20">
           <div className="flex flex-col items-center gap-6 rounded-2xl bg-white p-8 text-center md:p-12">
             <h2 className="font-serif text-[28px] font-semibold text-ink md:text-[36px]">

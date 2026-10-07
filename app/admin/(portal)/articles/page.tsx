@@ -58,7 +58,7 @@ export default async function AdminArticlesPage({
         </div>
         <Link
           href="/admin/articles/new"
-          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
         >
           <Plus className="size-4" />
           New Article
@@ -74,7 +74,7 @@ export default async function AdminArticlesPage({
             className={cn(
               "border-b-2 px-4 py-2.5 text-sm font-medium transition-colors",
               status === tab.value
-                ? "border-admin-sage font-semibold text-admin-sage"
+                ? "border-admin-azure font-semibold text-admin-azure"
                 : "border-transparent text-gray-500 hover:text-ink",
             )}
           >
@@ -97,7 +97,7 @@ export default async function AdminArticlesPage({
         <select
           name="category"
           defaultValue={category ?? "All Categories"}
-          className="h-9 rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-sage"
+          className="h-9 rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-admin-azure"
         >
           <option>All Categories</option>
           {categories.map((c) => (
@@ -107,7 +107,7 @@ export default async function AdminArticlesPage({
         {status !== "all" && <input type="hidden" name="status" value={status} />}
         <button
           type="submit"
-          className="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-sage hover:text-admin-sage"
+          className="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-azure hover:text-admin-azure"
         >
           Apply
         </button>

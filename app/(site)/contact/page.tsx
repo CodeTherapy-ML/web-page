@@ -45,12 +45,12 @@ const quickAnswers = [
 ];
 
 const fieldClass =
-  "h-12 w-full rounded-lg border border-line bg-cream px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-sage";
+  "h-12 w-full rounded-lg border border-line bg-cream px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-azure";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="btn-sage w-full disabled:opacity-60">
+    <button type="submit" disabled={pending} className="btn-azure w-full disabled:opacity-60">
       {pending ? "Sending…" : "Send Message"}
     </button>
   );
@@ -186,7 +186,7 @@ export default function ContactPage() {
                 value={form.message}
                 onChange={(e) => update("message")(e.target.value)}
                 placeholder="Tell us about your project, clinical context, or research goals..."
-                className="min-h-[120px] w-full resize-y rounded-lg border border-line bg-cream px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-sage"
+                className="min-h-[120px] w-full resize-y rounded-lg border border-line bg-cream px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-azure"
               />
             </label>
 
@@ -195,9 +195,9 @@ export default function ContactPage() {
         </div>
 
         <div className="flex w-full flex-col gap-8 lg:w-[516px] lg:shrink-0">
-          <div className="flex flex-col gap-7 rounded-2xl bg-sage-soft p-8">
+          <div className="flex flex-col gap-7 rounded-2xl bg-azure-soft p-8">
             <div className="flex flex-col gap-1.5">
-              <p className="text-xs font-bold uppercase text-sage">Email Inquiry</p>
+              <p className="text-xs font-bold uppercase text-azure">Email Inquiry</p>
               <a
                 href="mailto:contact@codetherapy.ml"
                 className="font-serif text-[22px] font-semibold text-ink hover:underline"
@@ -207,11 +207,11 @@ export default function ContactPage() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <p className="text-xs font-bold uppercase text-sage">Our Main Offices &amp; Presence</p>
+              <p className="text-xs font-bold uppercase text-azure">Our Main Offices &amp; Presence</p>
               <ul className="flex flex-col gap-2">
                 {offices.map((office) => (
                   <li key={office.label} className="flex items-center gap-2">
-                    <MapPin className="size-4 shrink-0 text-sage" />
+                    <MapPin className="size-4 shrink-0 text-azure" />
                     <span
                       className={
                         office.primary
@@ -227,12 +227,12 @@ export default function ContactPage() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <p className="text-xs font-bold uppercase text-sage">Office Hours</p>
+              <p className="text-xs font-bold uppercase text-azure">Office Hours</p>
               <p className="text-sm text-ink-soft">Monday – Friday, 9:00 AM – 6:00 PM WAT</p>
             </div>
 
             <div className="flex flex-col gap-3">
-              <p className="text-xs font-bold uppercase text-sage">Follow Our Progress</p>
+              <p className="text-xs font-bold uppercase text-azure">Follow Our Progress</p>
               <div className="flex gap-3">
                 {socials.map(({ icon: Icon, href, label }) => (
                   <a
@@ -241,7 +241,7 @@ export default function ContactPage() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={label}
-                    className="flex size-9 items-center justify-center rounded-[18px] bg-white text-sage transition-colors hover:text-ink"
+                    className="flex size-9 items-center justify-center rounded-[18px] bg-white text-azure transition-colors hover:text-ink"
                   >
                     <Icon className="size-[18px]" />
                   </a>
@@ -250,8 +250,8 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="flex h-[180px] flex-col items-center justify-center gap-4 rounded-2xl bg-[#ece9dc] p-6">
-            <Globe className="size-11 text-sage" strokeWidth={1.5} />
+          <div className="flex h-[180px] flex-col items-center justify-center gap-4 rounded-2xl bg-azure-soft p-6">
+            <Globe className="size-11 text-azure" strokeWidth={1.5} />
             <p className="text-[13px] font-semibold text-ink">
               Mali • Ethiopia • Nigeria Locations
             </p>
@@ -268,7 +268,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {quickAnswers.map((item) => (
               <div key={item.q} className="flex flex-col gap-4 rounded-xl bg-white p-6">
-                <h3 className="font-serif text-xl font-semibold text-clay">{item.q}</h3>
+                <h3 className="font-serif text-xl font-semibold text-navy">{item.q}</h3>
                 <p className="text-sm leading-[1.5] text-ink-soft">{item.a}</p>
               </div>
             ))}

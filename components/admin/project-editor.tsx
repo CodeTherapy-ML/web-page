@@ -2,16 +2,17 @@
 
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ImagePlus, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { saveProject } from "@/app/admin/(portal)/projects/actions";
+import ImageUploadField from "@/components/admin/image-upload-field";
 import RichEditor from "@/components/admin/rich-editor";
 import { cn } from "@/lib/utils";
+import ConfirmDialog from "@/components/admin/confirm-dialog";
 
 const inputClass =
-  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none transition-colors focus:border-admin-sage";
+  "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none transition-colors focus:border-admin-azure";
 const labelClass = "text-[13px] font-semibold text-gray-600";
 
 function PublishButtons() {
@@ -23,7 +24,7 @@ function PublishButtons() {
         name="intent"
         value="draft"
         disabled={pending}
-        className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-semibold text-[#1e293b] transition-colors hover:border-admin-sage hover:text-admin-sage disabled:opacity-60"
+        className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-semibold text-[#1e293b] transition-colors hover:border-admin-azure hover:text-admin-azure disabled:opacity-60"
       >
         Save Draft
       </button>
@@ -32,7 +33,7 @@ function PublishButtons() {
         name="intent"
         value="publish"
         disabled={pending}
-        className="rounded-lg bg-admin-sage px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+        className="rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
       >
         Publish Changes
       </button>
@@ -94,6 +95,11 @@ export default function ProjectEditor({
       )
     : [];
   const [publications, setPublications] = useState(initialPublications);
+  // Pending row removal — confirmed through the shared dialog.
+  const [removeTarget, setRemoveTarget] = useState<{
+    kind: "milestone" | "publication";
+    index: number;
+  } | null>(null);
 
 
   return (
@@ -103,13 +109,40 @@ export default function ProjectEditor({
       <input type="hidden" name="milestonesJson" value={JSON.stringify(milestones)} />
       <input type="hidden" name="publicationEntriesJson" value={JSON.stringify(publications)} />
       {/* Required by the save schema — kept as the project's current tone. */}
+      <ConfirmDialog
+        open={removeTarget !== null}
+        title={
+          removeTarget?.kind === "publication"
+            ? "Remove this publication?"
+            : "Remove this milestone?"
+        }
+        description={
+          removeTarget
+            ? (removeTarget.kind === "publication"
+                ? publications[removeTarget.index]?.title
+                : milestones[removeTarget.index]?.title) || "Unsaved entry"
+            : undefined
+        }
+        confirmLabel="Remove"
+        onCancel={() => setRemoveTarget(null)}
+        onConfirm={() => {
+          if (!removeTarget) return;
+          if (removeTarget.kind === "publication") {
+            setPublications((prev) => prev.filter((_, j) => j !== removeTarget.index));
+          } else {
+            setMilestones((prev) => prev.filter((_, j) => j !== removeTarget.index));
+          }
+          setRemoveTarget(null);
+        }}
+      />
+
       <input type="hidden" name="tagTone" value={project?.tagTone ?? "sage"} />
 
       {/* ---------------------------------------------------- editor header */}
       <header className="flex flex-col gap-4">
         <Link
           href="/admin/projects"
-          className="self-start text-sm font-semibold text-admin-sage hover:underline"
+          className="self-start text-sm font-semibold text-admin-azure hover:underline"
         >
           ← Back to Projects
         </Link>
@@ -149,46 +182,15 @@ export default function ProjectEditor({
           <section className="rounded-xl border border-gray-200 bg-white p-5">
             <h2 className="mb-4 font-bold text-ink">Project Overview</h2>
 
-            <div className="mb-4 flex flex-col gap-3 sm:flex-row">
-              <div className="relative h-[150px] w-full shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50 sm:w-[240px]">
-                {project?.heroImage && (
-                  <Image
-                    src={project.heroImage}
-                    alt="Project hero cover"
-                    fill
-                    sizes="240px"
-                    className="object-cover"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <p className={labelClass}>Project Hero Cover Image</p>
-                <p className="text-xs text-gray-400">
-                  Recommended size: 1200x630px. Max 4MB.
-                </p>
-                <label className="mt-auto flex w-fit items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-[#1e293b] transition-colors hover:border-admin-sage hover:text-admin-sage">
-                  <ImagePlus className="size-4" />
-                  Change Image
-                  <input type="file" className="hidden" accept="image/*" />
-                </label>
-                <div className="flex gap-3">
-                  <input
-                    name="heroImage"
-                    required
-                    defaultValue={project?.heroImage}
-                    placeholder="/v2/detail-project.png"
-                    className={inputClass}
-                  />
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 rounded-lg border border-gray-200 px-3 text-xs font-semibold text-gray-500 hover:text-red-600"
-                  >
-                    <Trash2 className="size-3.5" />
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ImageUploadField
+              name="heroImage"
+              label="Project Hero Cover Image"
+              required
+              defaultValue={project?.heroImage}
+              hint="Recommended size: 1200×630px. Max 4MB."
+              previewClassName="h-[150px] sm:w-[240px]"
+              className="mb-4"
+            />
 
             <div className="flex flex-col gap-2">
               <label htmlFor="summary" className={labelClass}>
@@ -201,7 +203,7 @@ export default function ProjectEditor({
                 maxLength={240}
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
-                className="w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-admin-sage"
+                className="w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-admin-azure"
               />
               <p className="text-right text-xs text-gray-400">
                 {summary.length} / 240 characters
@@ -217,8 +219,8 @@ export default function ProjectEditor({
           <section className="rounded-xl border border-gray-200 bg-white p-5">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-bold text-ink">Project Content</h2>
-              <span className="flex items-center gap-1.5 text-xs font-semibold text-admin-sage">
-                <span className="size-1.5 rounded-full bg-admin-sage" />
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-admin-azure">
+                <span className="size-1.5 rounded-full bg-admin-azure" />
                 Editor Synced
               </span>
             </div>
@@ -254,7 +256,7 @@ export default function ProjectEditor({
                   type="checkbox"
                   checked={published}
                   onChange={(e) => setPublished(e.target.checked)}
-                  className="size-4 rounded accent-admin-sage"
+                  className="size-4 rounded accent-admin-azure"
                 />
                 <span className="text-sm text-[#1e293b]">Show on public site</span>
               </label>
@@ -270,7 +272,6 @@ export default function ProjectEditor({
               {[
                 ["tag", "Tag"],
                 ["date", "Display date"],
-                ["image", "Card image URL"],
                 ["byline", "Byline"],
                 ["publishedOn", "Published on"],
                 ["readTime", "Read time"],
@@ -292,6 +293,13 @@ export default function ProjectEditor({
                   />
                 </label>
               ))}
+              <ImageUploadField
+                name="image"
+                label="Card image"
+                defaultValue={project?.image}
+                previewClassName="h-28"
+                className="col-span-2"
+              />
             </div>
           </section>
 
@@ -319,7 +327,7 @@ export default function ProjectEditor({
                     { title: "", date: "", status: "inProgress" },
                   ])
                 }
-                className="flex items-center gap-1 text-xs font-semibold text-admin-sage hover:underline"
+                className="flex items-center gap-1 text-xs font-semibold text-admin-azure hover:underline"
               >
                 <Plus className="size-3.5" />
                 Add Milestone
@@ -332,9 +340,9 @@ export default function ProjectEditor({
                     <span
                       className={cn(
                         "rounded px-2 py-0.5 text-[10px] font-bold uppercase",
-                        m.status === "completed" && "bg-[#ebf2ec] text-admin-sage",
-                        m.status === "inProgress" && "bg-[#eff6ff] text-[#2563eb]",
-                        m.status === "planned" && "bg-[#fdf1ea] text-admin-clay",
+                        m.status === "completed" && "bg-[#e2f4fd] text-admin-azure",
+                        m.status === "inProgress" && "bg-[#cbe9fa] text-admin-azure",
+                        m.status === "planned" && "bg-[#e7ecf1] text-admin-navy",
                       )}
                     >
                       {m.status === "completed"
@@ -345,9 +353,7 @@ export default function ProjectEditor({
                     </span>
                     <button
                       type="button"
-                      onClick={() =>
-                        setMilestones((prev) => prev.filter((_, j) => j !== i))
-                      }
+                      onClick={() => setRemoveTarget({ kind: "milestone", index: i })}
                       aria-label="Remove milestone"
                       className="text-gray-300 transition-colors hover:text-red-500"
                     >
@@ -384,7 +390,7 @@ export default function ProjectEditor({
                           )
                         }
                         aria-label="Milestone status"
-                        className="h-10 w-32 shrink-0 rounded-lg border border-gray-200 bg-white px-2 text-sm text-ink outline-none focus:border-admin-sage"
+                        className="h-10 w-32 shrink-0 rounded-lg border border-gray-200 bg-white px-2 text-sm text-ink outline-none focus:border-admin-azure"
                       >
                         <option value="completed">Completed</option>
                         <option value="inProgress">In Progress</option>
@@ -411,7 +417,7 @@ export default function ProjectEditor({
                     { title: "", journal: "", status: "Published" },
                   ])
                 }
-                className="flex items-center gap-1 text-xs font-semibold text-admin-sage hover:underline"
+                className="flex items-center gap-1 text-xs font-semibold text-admin-azure hover:underline"
               >
                 <Plus className="size-3.5" />
                 Add Publication
@@ -429,13 +435,11 @@ export default function ProjectEditor({
                         )
                       }
                       placeholder="Journal"
-                      className="h-9 w-40 rounded-lg border border-gray-200 bg-white px-2.5 text-xs text-ink outline-none focus:border-admin-sage"
+                      className="h-9 w-40 rounded-lg border border-gray-200 bg-white px-2.5 text-xs text-ink outline-none focus:border-admin-azure"
                     />
                     <button
                       type="button"
-                      onClick={() =>
-                        setPublications((prev) => prev.filter((_, j) => j !== i))
-                      }
+                      onClick={() => setRemoveTarget({ kind: "publication", index: i })}
                       aria-label="Remove publication"
                       className="text-gray-300 transition-colors hover:text-red-500"
                     >
@@ -461,7 +465,7 @@ export default function ProjectEditor({
                         )
                       }
                       aria-label="Publication status"
-                      className="h-10 w-40 rounded-lg border border-gray-200 bg-white px-2 text-sm text-ink outline-none focus:border-admin-sage"
+                      className="h-10 w-40 rounded-lg border border-gray-200 bg-white px-2 text-sm text-ink outline-none focus:border-admin-azure"
                     >
                       <option>Published</option>
                       <option>Under Review</option>
