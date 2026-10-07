@@ -9,6 +9,7 @@ import { saveProject } from "@/app/admin/(portal)/projects/actions";
 import ImageUploadField from "@/components/admin/image-upload-field";
 import RichEditor from "@/components/admin/rich-editor";
 import { cn } from "@/lib/utils";
+import ConfirmDialog from "@/components/admin/confirm-dialog";
 
 const inputClass =
   "h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-ink outline-none transition-colors focus:border-admin-azure";
@@ -32,7 +33,7 @@ function PublishButtons() {
         name="intent"
         value="publish"
         disabled={pending}
-        className="rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+        className="rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
       >
         Publish Changes
       </button>
@@ -94,6 +95,11 @@ export default function ProjectEditor({
       )
     : [];
   const [publications, setPublications] = useState(initialPublications);
+  // Pending row removal — confirmed through the shared dialog.
+  const [removeTarget, setRemoveTarget] = useState<{
+    kind: "milestone" | "publication";
+    index: number;
+  } | null>(null);
 
 
   return (
@@ -103,6 +109,33 @@ export default function ProjectEditor({
       <input type="hidden" name="milestonesJson" value={JSON.stringify(milestones)} />
       <input type="hidden" name="publicationEntriesJson" value={JSON.stringify(publications)} />
       {/* Required by the save schema — kept as the project's current tone. */}
+      <ConfirmDialog
+        open={removeTarget !== null}
+        title={
+          removeTarget?.kind === "publication"
+            ? "Remove this publication?"
+            : "Remove this milestone?"
+        }
+        description={
+          removeTarget
+            ? (removeTarget.kind === "publication"
+                ? publications[removeTarget.index]?.title
+                : milestones[removeTarget.index]?.title) || "Unsaved entry"
+            : undefined
+        }
+        confirmLabel="Remove"
+        onCancel={() => setRemoveTarget(null)}
+        onConfirm={() => {
+          if (!removeTarget) return;
+          if (removeTarget.kind === "publication") {
+            setPublications((prev) => prev.filter((_, j) => j !== removeTarget.index));
+          } else {
+            setMilestones((prev) => prev.filter((_, j) => j !== removeTarget.index));
+          }
+          setRemoveTarget(null);
+        }}
+      />
+
       <input type="hidden" name="tagTone" value={project?.tagTone ?? "sage"} />
 
       {/* ---------------------------------------------------- editor header */}
@@ -308,7 +341,7 @@ export default function ProjectEditor({
                       className={cn(
                         "rounded px-2 py-0.5 text-[10px] font-bold uppercase",
                         m.status === "completed" && "bg-[#e2f4fd] text-admin-azure",
-                        m.status === "inProgress" && "bg-[#eff6ff] text-[#2563eb]",
+                        m.status === "inProgress" && "bg-[#cbe9fa] text-admin-azure",
                         m.status === "planned" && "bg-[#e7ecf1] text-admin-navy",
                       )}
                     >
@@ -320,9 +353,7 @@ export default function ProjectEditor({
                     </span>
                     <button
                       type="button"
-                      onClick={() =>
-                        setMilestones((prev) => prev.filter((_, j) => j !== i))
-                      }
+                      onClick={() => setRemoveTarget({ kind: "milestone", index: i })}
                       aria-label="Remove milestone"
                       className="text-gray-300 transition-colors hover:text-red-500"
                     >
@@ -408,9 +439,7 @@ export default function ProjectEditor({
                     />
                     <button
                       type="button"
-                      onClick={() =>
-                        setPublications((prev) => prev.filter((_, j) => j !== i))
-                      }
+                      onClick={() => setRemoveTarget({ kind: "publication", index: i })}
                       aria-label="Remove publication"
                       className="text-gray-300 transition-colors hover:text-red-500"
                     >

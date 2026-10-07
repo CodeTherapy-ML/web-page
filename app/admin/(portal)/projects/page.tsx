@@ -23,7 +23,7 @@ export default async function AdminProjectsPage() {
         </div>
         <Link
           href="/admin/projects/new"
-          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+          className="flex shrink-0 items-center gap-2 rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
         >
           <Plus className="size-4" />
           Add Project
@@ -61,7 +61,7 @@ export default async function AdminProjectsPage() {
                   <span
                     className={cn(
                       "shrink-0 rounded-xl px-2.5 py-1 text-xs font-semibold",
-                      active ? "bg-[#dcfce7] text-[#15803d]" : "bg-[#eff6ff] text-[#2563eb]",
+                      active ? "bg-[#cbe9fa] text-admin-azure" : "bg-[#e7ecf1] text-admin-navy",
                     )}
                   >
                     {active ? "Active" : "Under Review"}
@@ -115,7 +115,7 @@ export default async function AdminProjectsPage() {
                     <Link
                       href={`/projects/${project.slug}`}
                       target="_blank"
-                      className="rounded bg-admin-azure px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+                      className="rounded bg-admin-azure px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-azure-deep"
                     >
                       View
                     </Link>

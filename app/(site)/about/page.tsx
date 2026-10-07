@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react"
 import SectionLabel from "@/components/section-label"
 import Reveal from "@/components/reveal"
 import StatsBand from "@/components/stats-band"
+import MemberAvatar from "@/components/member-avatar"
 import { values } from "@/lib/site-content"
 import { getTeamMembers } from "@/lib/content-queries"
 import { teamMembers as team } from "@/lib/content"
@@ -150,15 +151,13 @@ export default async function AboutPage() {
                   sits high so the trim always comes off the chest, never the face.
                   Wide environmental shots give up side background instead.
                 */}
-                <div className="relative w-full border-b aspect-square shrink-0 border-line bg-azure-soft">
-                  <Image
-                    src={member.photo}
-                    alt={member.name}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover object-[center_25%]"
-                  />
-                </div>
+                <MemberAvatar
+                  name={member.name}
+                  src={member.photo}
+                  className="aspect-square w-full shrink-0 border-b border-line"
+                  imgClassName="object-[center_25%]"
+                  iconClassName="size-16 text-azure/40"
+                />
                 <div className="flex flex-col gap-2 px-5 pt-5 pb-6">
                   <div className="flex items-center gap-2">
                     <h3 className="font-serif text-xl font-semibold text-ink">{member.name}</h3>

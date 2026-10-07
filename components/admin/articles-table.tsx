@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Edit3, Trash2 } from "lucide-react";
 import { bulkDelete, bulkSetStatus } from "@/app/admin/(portal)/articles/actions";
 import { cn } from "@/lib/utils";
+import ConfirmDialog from "@/components/admin/confirm-dialog";
 
 type Row = {
   id: string;
@@ -19,7 +20,7 @@ type Row = {
 
 const statusPill: Record<string, string> = {
   published: "bg-[#e2f4fd] text-admin-azure",
-  underReview: "bg-[#eff6ff] text-[#2563eb]",
+  underReview: "bg-[#cbe9fa] text-admin-azure",
   draft: "bg-[#e7ecf1] text-admin-navy",
 };
 const statusLabel: Record<string, string> = {
@@ -31,6 +32,8 @@ const statusLabel: Record<string, string> = {
 export default function ArticlesTable({ posts }: { posts: Row[] }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState("published");
+  const [confirmBulk, setConfirmBulk] = useState(false);
+  const [bulkPending, setBulkPending] = useState(false);
 
   const toggle = (id: string) =>
     setSelected((prev) => {
@@ -73,7 +76,8 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
               Change Status
             </button>
             <button
-              formAction={bulkDelete}
+              type="button"
+              onClick={() => setConfirmBulk(true)}
               className="flex items-center gap-1 rounded-lg border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
             >
               <Trash2 className="size-3.5" />
@@ -82,6 +86,26 @@ export default function ArticlesTable({ posts }: { posts: Row[] }) {
           </form>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmBulk}
+        title={`Delete ${selected.size} article${selected.size === 1 ? "" : "s"}?`}
+        description="The articles are removed from the blog and search engines will 404. This cannot be undone."
+        pending={bulkPending}
+        onCancel={() => setConfirmBulk(false)}
+        onConfirm={async () => {
+          setBulkPending(true);
+          const fd = new FormData();
+          fd.set("ids", JSON.stringify(Array.from(selected)));
+          try {
+            await bulkDelete(fd);
+            setSelected(new Set());
+          } finally {
+            setBulkPending(false);
+            setConfirmBulk(false);
+          }
+        }}
+      />
 
       <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
         <table className="w-full min-w-[760px] text-left text-sm">

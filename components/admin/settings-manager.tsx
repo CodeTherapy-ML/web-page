@@ -8,6 +8,7 @@ import { Check, Github, Linkedin, Twitter, Youtube } from "lucide-react";
 import { clearCache, deleteSiteContent, pruneAnalytics, saveGeneralSettings } from "@/app/admin/(portal)/settings/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import ConfirmDialog from "@/components/admin/confirm-dialog";
 
 type Settings = {
   siteName: string;
@@ -69,6 +70,8 @@ function Checkbox({
 export default function SettingsManager({ settings }: { settings: Settings }) {
   const { toast } = useToast();
   const [tab, setTab] = useState("General");
+  const [confirmNuke, setConfirmNuke] = useState(false);
+  const [nukePending, setNukePending] = useState(false);
   const [formState, formAction] = useFormState(saveGeneralSettings, { ok: true });
 
   // General form state — seeded from DB settings.
@@ -360,22 +363,36 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
                   >
                     Export All Data
                   </Link>
-                  <form
-                    action={async () => {
-                      if (confirm("Delete ALL site content? This cannot be undone.")) {
-                        await deleteSiteContent();
-                        toast({ title: "Site content deleted", variant: "destructive" });
-                      }
-                    }}
+                  <button
+                    type="button"
+                    onClick={() => setConfirmNuke(true)}
+                    className="h-9 rounded-lg border border-red-600 bg-[#fee2e2] px-3.5 text-[13px] font-semibold text-red-600 transition-colors hover:bg-[#fecaca]"
                   >
-                    <button className="h-9 rounded-lg border border-red-600 bg-[#fee2e2] px-3.5 text-[13px] font-semibold text-red-600 transition-colors hover:bg-[#fecaca]">
-                      Delete Site
-                    </button>
-                  </form>
+                    Delete Site
+                  </button>
                 </div>
               </section>
             </div>
           </div>
+
+          <ConfirmDialog
+            open={confirmNuke}
+            title="Delete ALL site content?"
+            description="Every project, article, team member, partnership, FAQ and media record is removed. This cannot be undone — export your data first."
+            confirmLabel="Delete everything"
+            pending={nukePending}
+            onCancel={() => setConfirmNuke(false)}
+            onConfirm={async () => {
+              setNukePending(true);
+              try {
+                await deleteSiteContent();
+                toast({ title: "Site content deleted", variant: "destructive" });
+              } finally {
+                setNukePending(false);
+                setConfirmNuke(false);
+              }
+            }}
+          />
 
           {/* Full-width unsaved-changes bar — only when the form is dirty */}
           {dirty && (
@@ -454,7 +471,7 @@ export default function SettingsManager({ settings }: { settings: Settings }) {
                       className={cn(
                         "rounded px-2 py-0.5 text-xs font-semibold",
                         user.status === "active"
-                          ? "bg-[#dcfce7] text-[#15803d]"
+                          ? "bg-[#e2f4fd] text-admin-azure"
                           : "bg-[#e7ecf1] text-admin-navy",
                       )}
                     >
@@ -559,7 +576,7 @@ function SaveChangesButton({ ok }: { ok: boolean }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+      className="rounded-lg bg-admin-azure px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
     >
       {pending ? "Saving…" : "Save Changes"}
     </button>

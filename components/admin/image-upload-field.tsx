@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ImagePlus, Loader2, Trash2 } from "lucide-react";
+import { ImagePlus, Loader2, Trash2, UserRound } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,7 @@ export default function ImageUploadField({
   required = false,
   hint,
   previewClassName,
+  placeholder,
   className,
 }: {
   name: string;
@@ -30,11 +31,15 @@ export default function ImageUploadField({
   hint?: string;
   /** Overrides the preview box size — defaults to a 144px-tall banner. */
   previewClassName?: string;
+  /** `"avatar"` shows the person-glyph placeholder when no image is set —
+   *  used by the team photo field, where a portrait is optional. */
+  placeholder?: "avatar";
   className?: string;
 }) {
   const { toast } = useToast();
   const fileRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState(defaultValue);
+  const [brokenSrc, setBrokenSrc] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [dragging, setDragging] = useState(false);
 
@@ -87,8 +92,22 @@ export default function ImageUploadField({
           previewClassName,
         )}
       >
-        {url ? (
-          <Image src={url} alt="" fill sizes="320px" className="object-cover" />
+        {url && brokenSrc !== url ? (
+          <Image
+            src={url}
+            alt=""
+            fill
+            sizes="320px"
+            className="object-cover"
+            onError={() => setBrokenSrc(url)}
+          />
+        ) : placeholder === "avatar" ? (
+          <span className="flex flex-col items-center justify-center gap-2">
+            <UserRound className="size-10 text-azure/50" strokeWidth={1.5} />
+            <span className="px-3 text-center text-xs text-gray-400">
+              No photo — the avatar placeholder is shown
+            </span>
+          </span>
         ) : (
           <span className="px-3 text-center text-xs text-gray-400">
             Drop an image here, or use Upload below

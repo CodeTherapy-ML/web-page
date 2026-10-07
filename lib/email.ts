@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import {
   contactAcknowledgement,
   contactNotification,
+  leadReply,
   newsletterNotification,
   newsletterWelcome,
   type ContactSubmission,
@@ -133,6 +134,25 @@ export async function sendNewsletterEmails(email: string): Promise<DeliveryResul
   });
 
   return { admin, sender };
+}
+
+/**
+ * A reply composed in the admin inbox. Sent straight to the lead's address
+ * with the team inbox as reply-to, so follow-ups come back into Messages.
+ * Returns false (without throwing) when SMTP is not configured.
+ */
+export async function sendLeadReply(input: {
+  to: string;
+  name: string;
+  subject: string;
+  body: string;
+}): Promise<boolean> {
+  const { to: teamInbox } = await inboxConfig();
+  return send({
+    to: input.to,
+    replyTo: teamInbox ?? undefined,
+    mail: leadReply({ name: input.name, subject: input.subject, body: input.body }),
+  });
 }
 
 export async function sendPasswordResetNote(email: string): Promise<boolean> {

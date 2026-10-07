@@ -493,7 +493,7 @@ export default function RichEditor({
           <button
             type="button"
             onClick={insertEmbed}
-            className="shrink-0 rounded-lg bg-admin-azure px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+            className="shrink-0 rounded-lg bg-admin-azure px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-azure-deep"
           >
             Insert
           </button>

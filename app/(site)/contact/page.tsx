@@ -250,7 +250,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="flex h-[180px] flex-col items-center justify-center gap-4 rounded-2xl bg-[#ece9dc] p-6">
+          <div className="flex h-[180px] flex-col items-center justify-center gap-4 rounded-2xl bg-azure-soft p-6">
             <Globe className="size-11 text-azure" strokeWidth={1.5} />
             <p className="text-[13px] font-semibold text-ink">
               Mali • Ethiopia • Nigeria Locations

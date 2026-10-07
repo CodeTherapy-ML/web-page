@@ -59,7 +59,7 @@ function shell(opts: {
             <tr>
               <td style="background:${INK};padding:20px 28px;">
                 <span style="font:700 18px/1 Helvetica,Arial,sans-serif;color:#ffffff;letter-spacing:-.01em;">Code<span style="color:#00aeef;">Therapy</span></span>
-                <div style="font:400 12px/1.4 Helvetica,Arial,sans-serif;color:#9fb3c4;padding-top:6px;">Technology that reaches the last mile first.</div>
+                <div style="font:400 12px/1.4 Helvetica,Arial,sans-serif;color:#8aa0b0;padding-top:6px;">Technology that reaches the last mile first.</div>
               </td>
             </tr>
             <tr>
@@ -175,6 +175,28 @@ export function newsletterNotification(email: string): Mail {
       footerNote: "Subscribers are listed in the admin portal under Messages.",
     }),
     text: plain(heading, intro, rows),
+  };
+}
+
+type LeadReply = {
+  name: string;
+  subject: string;
+  body: string;
+};
+
+/** A reply composed in the admin inbox — sent to whoever submitted the lead. */
+export function leadReply(d: LeadReply): Mail {
+  const heading = `Re: your enquiry to CodeTherapy`;
+  return {
+    subject: d.subject || heading,
+    html: shell({
+      preheader: d.body.slice(0, 90),
+      heading: d.subject || heading,
+      intro: `Hi ${d.name.split(" ")[0]}, a member of the CodeTherapy team replied to your message. The response is below — just reply to this email to continue the conversation.`,
+      body: d.body,
+      footerNote: "You're receiving this because you contacted CodeTherapy through codetherapy.ml.",
+    }),
+    text: plain(d.subject || heading, `Hi ${d.name.split(" ")[0]},`, [], d.body),
   };
 }
 

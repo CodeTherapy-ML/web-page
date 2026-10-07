@@ -31,7 +31,7 @@ function SaveButtons() {
         name="intent"
         value="publish"
         disabled={pending}
-        className="rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+        className="rounded-lg bg-admin-azure px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
       >
         Publish Article
       </button>
@@ -221,10 +221,10 @@ export default function ArticleEditor({
                 </div>
               </label>
               <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                <p className="truncate text-sm font-semibold text-[#2563eb]">
+                <p className="truncate text-sm font-semibold text-admin-azure">
                   {title || "Article title"} - CodeTherapy
                 </p>
-                <p className="truncate text-xs text-[#15803d]">
+                <p className="truncate text-xs text-ink-soft">
                   https://codetherapy.ml/blog/{slug || "…"}
                 </p>
                 <p className="line-clamp-2 text-xs text-gray-500">

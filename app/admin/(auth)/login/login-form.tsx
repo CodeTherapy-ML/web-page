@@ -11,7 +11,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="flex h-11 w-full items-center justify-center rounded-lg bg-admin-azure text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b] disabled:opacity-60"
+      className="flex h-11 w-full items-center justify-center rounded-lg bg-admin-azure text-sm font-semibold text-white transition-colors hover:bg-azure-deep disabled:opacity-60"
     >
       {pending ? "Signing in…" : "Sign In"}
     </button>
@@ -31,7 +31,7 @@ export default function LoginForm({ next }: { next?: string }) {
       <input type="hidden" name="next" value={next ?? "/admin"} />
 
       <header className="flex flex-col gap-2">
-        <h1 className="font-geist text-[32px] font-bold text-[#1a1d24]">
+        <h1 className="font-geist text-[32px] font-bold text-[#0d1117]">
           Welcome back
         </h1>
         <p className="text-[15px] text-[#4b5563]">
@@ -41,7 +41,7 @@ export default function LoginForm({ next }: { next?: string }) {
 
       <div className="flex flex-col gap-5">
         <label className="flex flex-col gap-2">
-          <span className="text-[13px] font-semibold text-[#1a1d24]">
+          <span className="text-[13px] font-semibold text-[#0d1117]">
             Email Address
           </span>
           <input
@@ -55,7 +55,7 @@ export default function LoginForm({ next }: { next?: string }) {
         </label>
 
         <label className="flex flex-col gap-2">
-          <span className="text-[13px] font-semibold text-[#1a1d24]">
+          <span className="text-[13px] font-semibold text-[#0d1117]">
             Password
           </span>
           <span className="relative block">

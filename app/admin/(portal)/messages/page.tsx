@@ -1,5 +1,6 @@
 import MessagesInbox from "@/components/admin/messages-inbox";
-import { db } from "@/lib/db";
+import { getInbox } from "@/lib/messages-query";
+import type { InboxSearchParams } from "@/lib/messages-params";
 
 export const metadata = { title: "Messages — CodeTherapy Admin" };
 
@@ -7,17 +8,27 @@ export const metadata = { title: "Messages — CodeTherapy Admin" };
  * Contact-form + newsletter inbox. Every public form submission lands in the
  * Lead table (app/(site)/contact/actions.ts) — this screen is where the team
  * reads them, instead of relying on the notification email alone.
+ *
+ * List state lives in the URL (?q=&source=&status=&limit=): filter/search
+ * server-side, selection deep-links to /admin/messages/[id], and "Load more"
+ * grows the limit — so messages are shareable and the browser back button
+ * walks the inbox history.
  */
-export default async function AdminMessagesPage() {
-  const leads = await db.lead.findMany({ orderBy: { createdAt: "desc" }, take: 500 });
+export default async function AdminMessagesPage({
+  searchParams,
+}: {
+  searchParams: InboxSearchParams;
+}) {
+  const inbox = await getInbox(searchParams);
 
   return (
     <div className="p-6">
       <MessagesInbox
-        leads={leads.map((lead) => ({
-          ...lead,
-          createdAt: lead.createdAt.toISOString(),
-        }))}
+        leads={inbox.leads}
+        counts={inbox.counts}
+        hasMore={inbox.hasMore}
+        initialParams={inbox.params}
+        openId={null}
       />
     </div>
   );

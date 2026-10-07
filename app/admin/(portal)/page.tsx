@@ -84,7 +84,7 @@ export default async function AdminDashboardPage() {
 
   const statusPill: Record<string, string> = {
     published: "bg-[#e2f4fd] text-admin-azure",
-    underReview: "bg-[#eff6ff] text-[#2563eb]",
+    underReview: "bg-[#cbe9fa] text-admin-azure",
     draft: "bg-[#e7ecf1] text-admin-navy",
   };
   const statusLabel: Record<string, string> = {
@@ -191,7 +191,7 @@ export default async function AdminDashboardPage() {
             <div className="flex flex-col gap-2">
               <Link
                 href="/admin/articles/new"
-                className="flex items-center gap-2.5 rounded-md bg-admin-azure px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3f6a4b]"
+                className="flex items-center gap-2.5 rounded-md bg-admin-azure px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-azure-deep"
               >
                 <Plus className="size-4" />
                 <span className="flex-1">New Article</span>
